@@ -244,5 +244,7 @@ bar {
     }
 }
 
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
 include $configHome/config.d/*
 include /etc/sway/config.d/*

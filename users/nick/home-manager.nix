@@ -37,9 +37,31 @@ in {
     jq
     ripgrep
     tree
+    pre-commit
     watch
     wezterm
   ];
+
+  #--
+  # Services
+  #--
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    Unit = {  
+      Description = "polkit-gnome-authentication-agent-1";
+      After = [ "graphical-session.target" ];
+      Wants = [ "graphical-session.target" ];
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 2;
+      TimeoutStopSec = 10;
+    };
+  };
 
   #---------------------------------------------------------------------
   # Env vars and dotfiles
@@ -80,6 +102,7 @@ in {
   #
   # programs.gpg.enable = !isDarwin;
   #
+  
 
   programs.starship = {
     enable = true;
@@ -184,6 +207,8 @@ in {
       github.user = "rkage";
   #     push.default = "tracking";
       init.defaultBranch = "main";
+      url."git@github.com:mcfio/".insteadOf = "https://github.com/mcfio/";
+      url."git@github.com:rkage/".insteadOf = "https://github.com/rkage/";
     };
   };
 

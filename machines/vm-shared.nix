@@ -27,6 +27,7 @@
   # Use the systemd-boot EFI boot loader.
   boot = {
     tmp.cleanOnBoot = true;
+    plymouth.enable = true;
     loader = {
       systemd-boot.enable = true;
       # VMware, Parallels both only support this being 0 otherwise you see
@@ -67,9 +68,22 @@
   };
 
   # setup windowing environment
-  programs.sway.enable = true;
-
-  security.polkit.enable = true;
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
+  
+  # Setup greetd and tuigreet for simplified login screen
+  #services.greetd = {
+  #  enable = true;
+  #  settings = rec {
+  #    initial_session = {
+  #      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd ${pkgs.sway}/bin/sway";
+  #      user = "nick";
+  #    };
+  #    default_session = initial_session;
+  #  };
+  #};
 
   # Enable tailscale. We manually authenticate when we want with
   # "sudo tailscale up". If you don't use tailscale, you should comment
@@ -105,6 +119,7 @@
     xclip
     gnome.seahorse
     gnome.gnome-keyring
+    polkit_gnome
 
     # For hypervisors that support auto-resizing, this script forces it.
     # I've noticed not everyone listens to the udev events so this is a hack.
@@ -119,6 +134,11 @@
   ];
 
   # 1Password is not in home-manager, therefore needs to be configured here
+  # Additional componens need to be configured at a system level and require
+  # SUID wrappers in some cases.
+  security.polkit.enable = true;
+  services.gnome.gnome-keyring.enable = true;
+  programs.seahorse.enable = true;
   programs._1password.enable = true;
   programs._1password-gui = {
     enable = true;
@@ -137,10 +157,6 @@
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = true;
   services.openssh.settings.PermitRootLogin = "no";
-
-  # Enable Gnome Keyring & Seahorse
-  services.gnome.gnome-keyring.enable = true;
-  programs.seahorse.enable = true;
 
   # Disable the firewall since we're in a VM and we want to make it
   # easy to visit stuff in here. We only use NAT networking anyways.
