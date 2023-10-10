@@ -103,6 +103,8 @@
     niv
     rxvt_unicode
     xclip
+    gnome.seahorse
+    gnome.gnome-keyring
 
     # For hypervisors that support auto-resizing, this script forces it.
     # I've noticed not everyone listens to the udev events so this is a hack.
@@ -116,6 +118,13 @@
     gtkmm3
   ];
 
+  # 1Password is not in home-manager, therefore needs to be configured here
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "nick" ];
+  };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -128,6 +137,10 @@
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = true;
   services.openssh.settings.PermitRootLogin = "no";
+
+  # Enable Gnome Keyring & Seahorse
+  services.gnome.gnome-keyring.enable = true;
+  programs.seahorse.enable = true;
 
   # Disable the firewall since we're in a VM and we want to make it
   # easy to visit stuff in here. We only use NAT networking anyways.

@@ -21,7 +21,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: let
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs: let
     overlays = [
       inputs.eza-overlay.overlay
     ];

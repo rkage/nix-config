@@ -26,8 +26,6 @@ in {
   # per-project flakes sourced with direnv and nix-shell, so this is
   # not a huge list.
   home.packages = with pkgs; [
-    _1password
-    _1password-gui
     bat
     fd
     inputs.eza.packages.${pkgs.system}.default
