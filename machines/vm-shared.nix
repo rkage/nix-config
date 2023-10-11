@@ -98,9 +98,9 @@
   fonts = {
     fontDir.enable = true;
 
-    fonts = [
-      pkgs.fira-code
-      pkgs.jetbrains-mono
+    fonts = with pkgs; [
+      (nerdfonts.override { fonts = [ "FiraCode" "JetBrainsMono" ]; })
+      inter-ui
     ];
   };
 
