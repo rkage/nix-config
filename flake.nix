@@ -21,13 +21,12 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs: let
-    overlays = [
-      inputs.eza-overlay.overlay
-    ];
+  outputs = { self, nixpkgs, home-manager, ... } @inputs: let
 
+    overlays = [ ];
+    
     mkSystem = import ./lib/mksystem.nix {
-      inherit nixpkgs inputs;
+      inherit overlays nixpkgs inputs;
     };
   in {
     nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {

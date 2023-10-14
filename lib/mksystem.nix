@@ -1,4 +1,4 @@
-{ nixpkgs, inputs }:
+{ nixpkgs, overlays, inputs }:
 
 name:
 {
@@ -17,6 +17,9 @@ in systemFunc rec {
   inherit system;
 
   modules = [
+
+    { nixpkgs.overlays = overlays; }
+
     machineConfig
     userOSConfig
     home-manager.home-manager {

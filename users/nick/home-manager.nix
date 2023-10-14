@@ -14,7 +14,8 @@ let
 in {
 
   imports = [
-    ./waybar
+  #  ./nvchad
+  #  ./waybar
   ];
   # Home-manager 22.11 requires this be set. We never set it so we have
   # to use the old state version.
@@ -37,42 +38,29 @@ in {
     kubectl
     fluxcd
     gh
+    grc
+    zoxide
     htop
+    btop
+    gcc
+    lua-language-server
     jq
     ripgrep
     tree
     pre-commit
     watch
     wezterm
+    nodejs
+    chromium
+    firefox
+    clipman
   ];
-
-  #--
-  # Services
-  #--
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
-    Unit = {  
-      Description = "polkit-gnome-authentication-agent-1";
-      After = [ "graphical-session.target" ];
-      Wants = [ "graphical-session.target" ];
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "on-failure";
-      RestartSec = 2;
-      TimeoutStopSec = 10;
-    };
-  };
 
   #---------------------------------------------------------------------
   # Env vars and dotfiles
   #---------------------------------------------------------------------
 
   home.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
     LANG = "en_CA.UTF-8";
     LC_CTYPE = "en_CA.UTF-8";
     LC_ALL = "en_CA.UTF-8";
@@ -88,6 +76,7 @@ in {
   xdg.configFile = {
     "sway/config".text = builtins.readFile ./sway-config;
     "wezterm/wezterm.lua".text = builtins.readFile ./wezterm.lua;
+    # "nvim".source = "${pkgs.astronvim}";
   #   "rofi/config.rasi".text = builtins.readFile ./rofi;
   #
   #   # tree-sitter parsers
@@ -98,6 +87,29 @@ in {
   #     "${sources.tree-sitter-proto}/queries/highlights.scm";
   #   "nvim/queries/proto/textobjects.scm".source =
   #     ./textobjects.scm;
+  };
+
+  #---------------------------------------------------------------------
+  # Services
+  #---------------------------------------------------------------------
+
+  # SystemdD polkit authentication frontend, I happen to like the gnome version
+  systemd = {
+    user.services.polkit-gnome-authentication-agent-1 = {
+      Unit = {
+        Description = "polkit-gnome-authentication-agent-1";
+        After = [ "graphical-session-pre.target" ];
+        PartOf = [ "graphical-session.target" ];
+      };
+      Service = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
+    };
   };
  
   #---------------------------------------------------------------------
@@ -128,7 +140,7 @@ in {
       modules-right = [ "tray" ];
       "custom/logo" = {
         format = "";
-	tooltip = false;
+      	tooltip = false;
       };
       "sway/workspaces" = {
         disable-scroll = false;
@@ -160,12 +172,12 @@ in {
       };
       "sway/window" = {
         format = "{}";
-	max-length = 50;
-	icon = false;
+        max-length = 50;
+        icon = false;
       };
       "tray" = {
         icon-size = 16;
-	spacing = 10;
+      	spacing = 10;
       };
     }];
     style = builtins.readFile ./waybar/style.css;
@@ -212,23 +224,17 @@ in {
   #
   programs.fish = {
     enable = true;
-  #   interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
-  #     "source ${sources.theme-bobthefish}/functions/fish_prompt.fish"
-  #     "source ${sources.theme-bobthefish}/functions/fish_right_prompt.fish"
-  #     "source ${sources.theme-bobthefish}/functions/fish_title.fish"
-  #     (builtins.readFile ./config.fish)
-  #     "set -g SHELL ${pkgs.fish}/bin/fish"
-  #   ]));
-    functions = {
-      # Disable Fish Greeting
-      fish_greeting = "";
-    };
+    interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
+      (builtins.readFile ./config.fish)
+      "set fish_greeting"
+      "set -g SHELL ${pkgs.fish}/bin/fish"
+    ]));
 
     shellAbbrs = rec {
-      ls = "eza";
       exa = "eza";
     };
-  #   shellAliases = {
+    shellAliases = {
+      ls = "eza";
   #     ga = "git add";
   #     gc = "git commit";
   #     gco = "git checkout";
@@ -244,15 +250,14 @@ in {
   #     pbcopy = "xclip";
   #     pbpaste = "xclip -o";
   #   } else {});
-  #
-  #   plugins = map (n: {
-  #     name = n;
-  #     src  = sources.${n};
-  #   }) [
-  #     "fish-fzf"
-  #     "fish-foreign-env"
-  #     "theme-bobthefish"
-  #   ];
+    };
+
+    plugins = [
+      { name = "grc"; src = pkgs.fishPlugins.grc.src; }
+      { name = "autopair"; src = pkgs.fishPlugins.autopair.src; }
+      { name = "forgit"; src = pkgs.fishPlugins.forgit.src; }
+      { name = "fzf-fish"; src = pkgs.fishPlugins.fzf-fish.src; }
+    ];
   };
   
   programs.git = {
@@ -346,9 +351,16 @@ in {
   #
   programs.neovim = {
     enable = true;
+
+    viAlias = true;
+    vimAlias = true;
+
+    withPython3 = true;
+
+    plugins = with pkgs.vimPlugins; [
+      luasnip
+    ];
   };
-  programs.neovim.viAlias = true;
-  programs.neovim.vimAlias = true;
   #
   #   withPython3 = true;
   #

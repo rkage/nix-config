@@ -226,5 +226,8 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+exec dbus-sway-environment
+exec configure-gtk
+
 include $configHome/config.d/*
 include /etc/sway/config.d/*

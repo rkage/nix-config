@@ -11,11 +11,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1696825816,
-        "narHash": "sha256-wsQ6/hVZMzHtw5cEaVeT0oKAZA98v76x2i9CBDiDBS8=",
+        "lastModified": 1697098100,
+        "narHash": "sha256-eST70KMdGgbTo4FNL3K5YGn9lwIGroG4y4ExKDb30hU=",
         "owner": "eza-community",
         "repo": "eza",
-        "rev": "3002c85300d80e543187de66d44731398a563962",
+        "rev": "7b743992578a9cb1f666f118d8b4edc218d60577",
         "type": "github"
       },
       "original": {

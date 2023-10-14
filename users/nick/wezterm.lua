@@ -33,8 +33,10 @@ config.window_padding = {
 }
 
 -- colors
-config.color_scheme = "Nord (base16)"
+config.color_scheme = "Catppuccin Mocha"
+-- config.color_scheme = "Nord (base16)"
 config.colors = {
+  visual_bell = "#202020",
 	background = "#191c1f",
 	-- tab_bar = {
 	-- 	active_tab = {
@@ -57,6 +59,11 @@ config.enable_tab_bar = false
 -- general config
 config.clean_exit_codes = { 130 }
 config.automatically_reload_config = true
--- config.front_end = "OpenGL"
+-- config.front_end = "WebGpu"
+
+config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
+config.keys = {
+  { key = "h", mods = "LEADER", action = wezterm.action.SplitPane({ direction = "Down", size = { Percent = 25 } }), },
+}
 
 return config
