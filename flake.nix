@@ -15,15 +15,24 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # rust-overlay
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     eza = {
       url = "github:eza-community/eza";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
   };
 
   outputs = { self, nixpkgs, home-manager, ... } @inputs: let
 
-    overlays = [ ];
+    overlays = [
+      inputs.rust-overlay.overlays.default
+    ];
     
     mkSystem = import ./lib/mksystem.nix {
       inherit overlays nixpkgs inputs;

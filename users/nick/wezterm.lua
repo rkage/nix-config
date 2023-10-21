@@ -26,9 +26,9 @@ config.underline_thickness = "150%"
 config.window_background_opacity = 0.95
 config.window_close_confirmation = "NeverPrompt"
 config.window_padding = {
-	left = "5px",
-	right = "5px",
-	top = "0",
+	left = "4px",
+	right = "4px",
+	top = "4px",
 	bottom = "0",
 }
 

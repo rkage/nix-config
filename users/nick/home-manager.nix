@@ -3,23 +3,25 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf;
-  hasPackage = pname: lib.any (p: p ? pname && p.pname == pname) config.home.packages;
-  hasExa = hasPackage "eza";
+  # inherit (lib) mkIf;
+  # hasPackage = pname: lib.any (p: p ? pname && p.pname == pname) config.home.packages;
+  # hasExa = hasPackage "eza";
 
   manpager = (pkgs.writeShellScriptBin "manpager" (''
     exec cat "$@" | col -bx | bat --language man --style plain
   ''));
 
 in {
-
-  imports = [
-  #  ./nvchad
-  #  ./waybar
-  ];
   # Home-manager 22.11 requires this be set. We never set it so we have
   # to use the old state version.
   home.stateVersion = "23.05";
+
+  imports = [
+    ./neovim.nix
+    ./starship.nix
+  #  ./nvchad
+  #  ./waybar
+  ];
 
   xdg.enable = true;
 
@@ -34,18 +36,16 @@ in {
     bat
     fd
     inputs.eza.packages.${pkgs.system}.default
+    rust-bin.stable.latest.default
     fzf
     kubectl
     fluxcd
     gh
     grc
-    zoxide
     htop
     btop
     gcc
-    lua-language-server
     jq
-    ripgrep
     tree
     pre-commit
     watch
@@ -54,6 +54,7 @@ in {
     chromium
     firefox
     clipman
+    python3
   ];
 
   #---------------------------------------------------------------------
@@ -66,7 +67,6 @@ in {
     LC_ALL = "en_CA.UTF-8";
     EDITOR = "nvim";
     PAGER = "less -FirSwX";
-    # MANPAGER = "sh -c 'col -bx | bat --language man --style plain";
     MANPAGER = "${manpager}/bin/manpager";
   };
 
@@ -151,12 +151,12 @@ in {
           "1" = "";
           "2" = "";
           "3" = "";
-          "4" = "";
+          "4" = "";
           "5" = "";
           "6" = "漣";
           "7" = "";
           "8" = "";
-          "9" = "";
+          "9" = "";
           "10" = "";
           urgent = "";
           default = "";
@@ -181,11 +181,6 @@ in {
       };
     }];
     style = builtins.readFile ./waybar/style.css;
-  };
-
-  programs.starship = {
-    enable = true;
-    settings = pkgs.lib.importTOML ./starship.toml;
   };
 
   # programs.bash = {
@@ -221,7 +216,7 @@ in {
   #     };
   #   };
   # };
-  #
+
   programs.fish = {
     enable = true;
     interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
@@ -230,7 +225,7 @@ in {
       "set -g SHELL ${pkgs.fish}/bin/fish"
     ]));
 
-    shellAbbrs = rec {
+    shellAbbrs = {
       exa = "eza";
     };
     shellAliases = {
@@ -258,6 +253,10 @@ in {
       { name = "forgit"; src = pkgs.fishPlugins.forgit.src; }
       { name = "fzf-fish"; src = pkgs.fishPlugins.fzf-fish.src; }
     ];
+  };
+
+  programs.zoxide = {
+    enable = true;
   };
   
   programs.git = {
@@ -349,18 +348,10 @@ in {
   #   };
   # };
   #
-  programs.neovim = {
-    enable = true;
-
-    viAlias = true;
-    vimAlias = true;
-
-    withPython3 = true;
-
-    plugins = with pkgs.vimPlugins; [
-      luasnip
-    ];
-  };
+  # programs.neovim = {
+  #   viAlias = true;
+  #   vimAlias = true;
+  # };
   #
   #   withPython3 = true;
   #
