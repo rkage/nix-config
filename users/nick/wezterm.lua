@@ -33,8 +33,8 @@ config.window_padding = {
 }
 
 -- colors
-config.color_scheme = "Catppuccin Mocha"
--- config.color_scheme = "Nord (base16)"
+-- config.color_scheme = "Catppuccin Mocha"
+config.color_scheme = "Nord (base16)"
 config.colors = {
   visual_bell = "#202020",
 	background = "#191c1f",

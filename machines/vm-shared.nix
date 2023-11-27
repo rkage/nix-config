@@ -1,23 +1,23 @@
 { config, pkgs, lib, currentSystem, currentSystemName, ... }:
 
-let
+# let
   # bash script to let dbus know about important env variables and
   # propagate them to relevent services run at the end of sway config
   # see
   # https://github.com/emersion/xdg-desktop-portal-wlr/wiki/"It-doesn't-work"-Troubleshooting-Checklist
   # note: this is pretty much the same as  /etc/sway/config.d/nixos.conf but also restarts  
   # some user services to make sure they have the correct environment variables
-  dbus-sway-environment = pkgs.writeTextFile {
-    name = "dbus-sway-environment";
-    destination = "/bin/dbus-sway-environment";
-    executable = true;
-
-    text = ''
-      dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-      # systemctl --user stop xdg-desktop-portal
-      # systemctl --user start xdg-desktop-portal
-    '';
-  };
+  # dbus-sway-environment = pkgs.writeTextFile {
+  #   name = "dbus-sway-environment";
+  #   destination = "/bin/dbus-sway-environment";
+  #   executable = true;
+  #
+  #   text = ''
+  #     dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+  #     # systemctl --user stop xdg-desktop-portal
+  #     # systemctl --user start xdg-desktop-portal
+  #   '';
+  # };
 
   # currently, there is some friction between sway and gtk:
   # https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
@@ -25,21 +25,21 @@ let
   # for gsettings to work, we need to tell it where the schemas are
   # using the XDG_DATA_DIR environment variable
   # run at the end of sway config
-  configure-gtk = pkgs.writeTextFile {
-    name = "configure-gtk";
-    destination = "/bin/configure-gtk";
-    executable = true;
-    text = let
-      schema = pkgs.gsettings-desktop-schemas;
-      datadir = "${schema}/share/gsettings-schemas/${schema.name}";
-    in ''
-      export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
-      gnome_schema=org.gnome.desktop.interface
-      gsettings set $gnome_schema gtk-theme 'Dracula'
-    '';
-  };
+  # configure-gtk = pkgs.writeTextFile {
+  #   name = "configure-gtk";
+  #   destination = "/bin/configure-gtk";
+  #   executable = true;
+  #   text = let
+  #     schema = pkgs.gsettings-desktop-schemas;
+  #     datadir = "${schema}/share/gsettings-schemas/${schema.name}";
+  #   in ''
+  #     export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
+  #     gnome_schema=org.gnome.desktop.interface
+  #     gsettings set $gnome_schema gtk-theme 'Dracula'
+  #   '';
+  # };
 
-in
+# in
 {
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -56,12 +56,12 @@ in
       dates = "weekly";
       options = "--delete-older-than 7d";
     };
+    package = pkgs.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
       keep-derivations = true
     '';
-
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -109,26 +109,26 @@ in
   # };
 
   # setup windowing environment
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-  };
+  # programs.sway = {
+  #   enable = true;
+  #   wrapperFeatures.gtk = true;
+  # };
   
   # Setup greetd and tuigreet for simplified login screen
   environment.variables = {
     WLR_NO_HARDWARE_CURSORS = "1";
   };
-  services.greetd = {
-   enable = true;
-   settings = rec {
-     initial_session = {
-       command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd ${pkgs.sway}/bin/sway";
-       user = "nick";
-     };
-     default_session = initial_session;
-   };
-  };
-  security.pam.services.greetd.enableGnomeKeyring = true;  
+  # services.greetd = {
+  #  enable = true;
+  #  settings = rec {
+  #    initial_session = {
+  #      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd ${pkgs.sway}/bin/sway";
+  #      user = "nick";
+  #    };
+  #    default_session = initial_session;
+  #  };
+  # };
+  # security.pam.services.greetd.enableGnomeKeyring = true;  
 
   # Enable tailscale. We manually authenticate when we want with
   # "sudo tailscale up". If you don't use tailscale, you should comment
@@ -152,26 +152,22 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    dbus-sway-environment
-    configure-gtk
+    # dbus-sway-environment
+    # configure-gtk
     wayland
     glib
-    wl-clipboard
-    xorg.xrandr
-    xorg.xset
     cachix
     gnumake
     killall
-    xclip
-    gnome.seahorse
-    gnome.gnome-keyring
+    # gnome.seahorse
+    # gnome.gnome-keyring
     polkit_gnome
 
     # For hypervisors that support auto-resizing, this script forces it.
     # I've noticed not everyone listens to the udev events so this is a hack.
-    (writeShellScriptBin "xrandr-auto" ''
-      xrandr --output Virtual-1 --auto
-    '')
+    # (writeShellScriptBin "xrandr-auto" ''
+    #   xrandr --output Virtual-1 --auto
+    # '')
   ] ++ lib.optionals (currentSystemName == "vm-aarch64") [
     # This is needed for the vmware user tools clipboard to work.
     # You can test if you don't need this by deleting this and seeing

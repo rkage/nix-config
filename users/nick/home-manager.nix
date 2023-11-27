@@ -19,6 +19,7 @@ in {
   imports = [
     ./neovim.nix
     ./starship.nix
+    ./sway
   #  ./nvchad
   #  ./waybar
   ];
@@ -53,7 +54,6 @@ in {
     nodejs
     chromium
     firefox
-    clipman
     python3
   ];
 
@@ -117,71 +117,6 @@ in {
   #---------------------------------------------------------------------
  
   # programs.gpg.enable = !isDarwin;
-
-  programs.waybar = { 
-    enable = true;
-    systemd.enable = true;
-    settings = [{
-      mode = "dock";
-      passthrough = false;
-      layer = "top";
-      position = "top";
-      height = 32;
-      width = 0;
-      spacing = 0;
-      margin = "0";
-      margin-top = 0;
-      margin-bottom = 0;
-      margin-left = 0;
-      margin-right = 0;
-      fixed-center = true;
-      ipc = true;
-      modules-left = [ "custom/logo" "sway/workspaces" "sway/mode" "sway/window" ];
-      modules-right = [ "tray" ];
-      "custom/logo" = {
-        format = "";
-      	tooltip = false;
-      };
-      "sway/workspaces" = {
-        disable-scroll = false;
-        disable-click = false;
-        all-outputs = false;
-        format = "{icon}";
-        format-icons = {
-          "1" = "";
-          "2" = "";
-          "3" = "";
-          "4" = "";
-          "5" = "";
-          "6" = "漣";
-          "7" = "";
-          "8" = "";
-          "9" = "";
-          "10" = "";
-          urgent = "";
-          default = "";
-        };
-        smooth-scrolling-threshold = 1;
-        disable-scroll-wraparound = false;
-        enable-bar-scroll = false;
-        disable-markup = false;
-        current-only = false;
-      };
-      "sway/mode" = {
-        format = "{}";
-      };
-      "sway/window" = {
-        format = "{}";
-        max-length = 50;
-        icon = false;
-      };
-      "tray" = {
-        icon-size = 16;
-      	spacing = 10;
-      };
-    }];
-    style = builtins.readFile ./waybar/style.css;
-  };
 
   # programs.bash = {
   #   enable = true;
