@@ -12,15 +12,13 @@ let
   ''));
 
 in {
-  # Home-manager 22.11 requires this be set. We never set it so we have
-  # to use the old state version.
+  # Home-manager 22.11 requires this be set.
   home.stateVersion = "23.05";
 
   imports = [
     ./nix-index.nix
     ./neovim.nix
     ./sway
-  #  ./nvchad
   #  ./waybar
   ];
 

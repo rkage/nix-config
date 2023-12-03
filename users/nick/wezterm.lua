@@ -13,7 +13,7 @@ return {
   font = wezterm.font({
     family = "MonoLisa",
     -- weight = "Regular",
-    harfbuzz_features = { "zero", "ss06", "ss07", "ss10", "ss11", "ss15", "ss16" },
+    harfbuzz_features = { "zero", "ss02", "ss03", "ss06", "ss07", "ss10", "ss11", "ss13", "ss15" },
   }),
   font_size = 9.0,
   underline_position = "-3px",
