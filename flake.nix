@@ -4,34 +4,21 @@
   inputs = {
     # Primary nixpkgs repository is pinned to the latest release. Updating
     # this will change all system packages.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
 
     # Configure the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Home Manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.05";
+      url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # rust-overlay
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
-    eza = {
-      url = "github:eza-community/eza";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
     };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... } @inputs: let
 
     overlays = [
-      inputs.rust-overlay.overlays.default
     ];
     
     mkSystem = import ./lib/mksystem.nix {

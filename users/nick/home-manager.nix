@@ -17,8 +17,8 @@ in {
   home.stateVersion = "23.05";
 
   imports = [
+    ./nix-index.nix
     ./neovim.nix
-    ./starship.nix
     ./sway
   #  ./nvchad
   #  ./waybar
@@ -34,13 +34,19 @@ in {
   # per-project flakes sourced with direnv and nix-shell, so this is
   # not a huge list.
   home.packages = with pkgs; [
-    bat
     fd
-    inputs.eza.packages.${pkgs.system}.default
-    rust-bin.stable.latest.default
+    eza
+    cargo
     fzf
     kubectl
+    kubectl-cnpg
+    kubectl-view-secret
     fluxcd
+    stern
+    kubernetes-helm
+    talosctl
+    terraform
+    cilium-cli
     gh
     grc
     htop
@@ -50,7 +56,6 @@ in {
     tree
     pre-commit
     watch
-    wezterm
     nodejs
     chromium
     firefox
@@ -74,8 +79,7 @@ in {
   # home.file.".inputrc".source = ./inputrc;
 
   xdg.configFile = {
-    "sway/config".text = builtins.readFile ./sway-config;
-    "wezterm/wezterm.lua".text = builtins.readFile ./wezterm.lua;
+    # "sway/config".text = builtins.readFile ./sway-config;
     # "nvim".source = "${pkgs.astronvim}";
   #   "rofi/config.rasi".text = builtins.readFile ./rofi;
   #
@@ -116,70 +120,61 @@ in {
   # Programs
   #---------------------------------------------------------------------
  
-  # programs.gpg.enable = !isDarwin;
+  programs.direnv = {
+    enable = true;
 
-  # programs.bash = {
-  #   enable = true;
-  #   shellOptions = [];
-  #   historyControl = [ "ignoredups" "ignorespace" ];
-  #   initExtra = builtins.readFile ./bashrc;
-  #
-  #   shellAliases = {
-  #     ga = "git add";
-  #     gc = "git commit";
-  #     gco = "git checkout";
-  #     gcp = "git cherry-pick";
-  #     gdiff = "git diff";
-  #     gl = "git prettylog";
-  #     gp = "git push";
-  #     gs = "git status";
-  #     gt = "git tag";
-  #   };
-  # };
-  #
-  # programs.direnv= {
-  #   enable = true;
-  #
-  #   config = {
-  #     whitelist = {
-  #       prefix= [
-  #         "$HOME/code/go/src/github.com/hashicorp"
-  #         "$HOME/code/go/src/github.com/mitchellh"
-  #       ];
-  #
-  #       exact = ["$HOME/.envrc"];
-  #     };
-  #   };
-  # };
+    config = {
+      whitelist = {
+        prefix= [
+          "$HOME/Projects"
+        ];
+        exact = ["$HOME/.envrc"];
+      };
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    settings = builtins.fromTOML (builtins.readFile ./starship.toml);
+  };
 
   programs.fish = {
     enable = true;
     interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
       (builtins.readFile ./config.fish)
-      "set fish_greeting"
       "set -g SHELL ${pkgs.fish}/bin/fish"
     ]));
 
     shellAbbrs = {
       exa = "eza";
+      k = "kubectl";
+      kgp = "kubectl get pods";
+      kga = "kubectl get pods --all-namespaces";
+      kd = "kubectl describe";
+      kdp = "kubectl describe pod";
+      ke = "kubectl edit";
+      kex = "kubectl exec -it";
+      kvs = "kubectl view-secret";
+      kgno = "kubectl get nodes --sort-by=.metadata.name -o wide";
     };
     shellAliases = {
       ls = "eza";
-  #     ga = "git add";
-  #     gc = "git commit";
-  #     gco = "git checkout";
-  #     gcp = "git cherry-pick";
-  #     gdiff = "git diff";
-  #     gl = "git prettylog";
-  #     gp = "git push";
-  #     gs = "git status";
-  #     gt = "git tag";
-  #   } // (if isLinux then {
-  #     # Two decades of using a Mac has made this such a strong memory
-  #     # that I'm just going to keep it consistent.
-  #     pbcopy = "xclip";
-  #     pbpaste = "xclip -o";
-  #   } else {});
+      cat = "bat";
+    #   ga = "git add";
+    #   gc = "git commit";
+    #   gco = "git checkout";
+    #   gcp = "git cherry-pick";
+    #   gdiff = "git diff";
+    #   gl = "git prettylog";
+    #   gp = "git push";
+    #   gs = "git status";
+    #   gt = "git tag";
+    # } // (if isLinux then {
+    #   # Two decades of using a Mac has made this such a strong memory
+    #   # that I'm just going to keep it consistent.
+    #   pbcopy = "xclip";
+    #   pbpaste = "xclip -o";
+    # } else {});
     };
 
     plugins = [
@@ -193,57 +188,49 @@ in {
   programs.zoxide = {
     enable = true;
   };
+
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "base16-256";
+    };
+    extraPackages = with pkgs.bat-extras;  [
+      batdiff
+      # batman
+      batgrep
+      batwatch
+    ];
+  };
   
   programs.git = {
     enable = true;
     userName = "Nick M";
     userEmail = "4718+rkage@users.noreply.github.com";
-  #   aliases = {
-  #     cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 -r git branch -d";
-  #     prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-  #     root = "rev-parse --show-toplevel";
-  #   };
+    aliases = {
+      cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 -r git branch -d";
+      prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
+      root = "rev-parse --show-toplevel";
+    };
     extraConfig = {
       gpg.format = "ssh";
       user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKh6CYAVDuF1quDBHTpbPrLNNq95kCXif4rvrMby38Lb";
-  #     branch.autosetuprebase = "always";
-  #     color.ui = true;
-  #     core.askPass = ""; # needs to be empty to use terminal for ask pass
-  #     credential.helper = "store"; # want to make this more secure
+      branch.autosetuprebase = "always";
+      color.ui = true;
+      # core.askPass = ""; # needs to be empty to use terminal for ask pass
+      # credential.helper = "store"; # want to make this more secure
       github.user = "rkage";
-  #     push.default = "tracking";
+      # push.default = "tracking";
       init.defaultBranch = "main";
       url."git@github.com:mcfio/".insteadOf = "https://github.com/mcfio/";
       url."git@github.com:rkage/".insteadOf = "https://github.com/rkage/";
     };
   };
 
-  # programs.go = {
-  #   enable = true;
-  #   goPath = "code/go";
-  #   goPrivate = [ "github.com/mitchellh" "github.com/hashicorp" "rfc822.mx" ];
-  # };
-  #
-  # programs.tmux = {
-  #   enable = true;
-  #   terminal = "xterm-256color";
-  #   shortcut = "l";
-  #   secureSocket = false;
-  #
-  #   extraConfig = ''
-  #     set -ga terminal-overrides ",*256col*:Tc"
-  #
-  #     set -g @dracula-show-battery false
-  #     set -g @dracula-show-network false
-  #     set -g @dracula-show-weather false
-  #
-  #     bind -n C-k send-keys "clear"\; send-keys "Enter"
-  #
-  #     run-shell ${sources.tmux-pain-control}/pain_control.tmux
-  #     run-shell ${sources.tmux-dracula}/dracula.tmux
-  #   '';
-  # };
-  #
+  programs.wezterm = {
+    enable = true;
+    extraConfig = builtins.readFile ./wezterm.lua;
+  };
+
   # programs.alacritty = {
   #   enable = !isWSL;
   #
@@ -259,93 +246,5 @@ in {
   #       { key = "Subtract"; mods = "Command"; action = "DecreaseFontSize"; }
   #     ];
   #   };
-  # };
-  #
-  # programs.kitty = {
-  #   enable = !isWSL;
-  #   extraConfig = builtins.readFile ./kitty;
-  # };
-  #
-  # programs.i3status = {
-  #   enable = isLinux && !isWSL;
-  #
-  #   general = {
-  #     colors = true;
-  #     color_good = "#8C9440";
-  #     color_bad = "#A54242";
-  #     color_degraded = "#DE935F";
-  #   };
-  #
-  #   modules = {
-  #     ipv6.enable = false;
-  #     "wireless _first_".enable = false;
-  #     "battery all".enable = false;
-  #   };
-  # };
-  #
-  # programs.neovim = {
-  #   viAlias = true;
-  #   vimAlias = true;
-  # };
-  #
-  #   withPython3 = true;
-  #
-  #   plugins = with pkgs; [
-  #     customVim.vim-copilot
-  #     customVim.vim-cue
-  #     customVim.vim-fish
-  #     customVim.vim-fugitive
-  #     customVim.vim-glsl
-  #     customVim.vim-misc
-  #     customVim.vim-pgsql
-  #     customVim.vim-tla
-  #     customVim.vim-zig
-  #     customVim.pigeon
-  #     customVim.AfterColors
-  #
-  #     customVim.vim-nord
-  #     customVim.nvim-comment
-  #     customVim.nvim-lspconfig
-  #     customVim.nvim-plenary # required for telescope
-  #     customVim.nvim-telescope
-  #     customVim.nvim-treesitter
-  #     customVim.nvim-treesitter-playground
-  #     customVim.nvim-treesitter-textobjects
-  #
-  #     vimPlugins.vim-airline
-  #     vimPlugins.vim-airline-themes
-  #     vimPlugins.vim-eunuch
-  #     vimPlugins.vim-gitgutter
-  #
-  #     vimPlugins.vim-markdown
-  #     vimPlugins.vim-nix
-  #     vimPlugins.typescript-vim
-  #   ] ++ (lib.optionals (!isWSL) [
-  #     # This is causing a segfaulting while building our installer
-  #     # for WSL so just disable it for now. This is a pretty
-  #     # unimportant plugin anyway.
-  #     customVim.vim-devicons
-  #   ]);
-  #
-  #   extraConfig = (import ./vim-config.nix) { inherit sources; };
-  # };
-  #
-  # services.gpg-agent = {
-  #   enable = isLinux;
-  #   pinentryFlavor = "tty";
-  #
-  #   # cache the keys forever so we don't get asked for a password
-  #   defaultCacheTtl = 31536000;
-  #   maxCacheTtl = 31536000;
-  # };
-  #
-  # xresources.extraConfig = builtins.readFile ./Xresources;
-  #
-  # # Make cursor not tiny on HiDPI screens
-  # home.pointerCursor = lib.mkIf (isLinux && !isWSL) {
-  #   name = "Vanilla-DMZ";
-  #   package = pkgs.vanilla-dmz;
-  #   size = 128;
-  #   x11.enable = true;
   # };
 }

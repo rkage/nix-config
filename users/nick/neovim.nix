@@ -13,6 +13,8 @@
     wget
     unzip
     ripgrep
-    # lua-language-server
+    lua-language-server
+    stylua
+    nil
   ];
 }

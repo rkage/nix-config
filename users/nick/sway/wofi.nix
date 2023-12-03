@@ -6,5 +6,47 @@ in
 {
   programs.wofi = {
     enable = true;
+
+    style = ''
+      window {
+        margin: 0px;
+        border: 1px solid #5e81ac;
+        background-color: #2e3440;
+      }
+
+      #input {
+        margin: 5px;
+        border: none;
+        color: #d8dee9;
+        background-color: #3b4252;
+      }
+
+      #inner-box {
+        margin: 5px;
+        border: none;
+        background-color: #2e3440;
+      }
+
+      #outer-box {
+        margin: 5px;
+        border: none;
+        background-color: #2e3440;
+      }
+
+      #scroll {
+        margin: 0px;
+        border: none;
+      }
+
+      #text {
+        margin: 5px;
+        border: none;
+        color: #d8dee9;
+      }
+
+      #entry:selected {
+        background-color: #3b4252;
+      }
+    '';
   };
 }

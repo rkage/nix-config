@@ -191,7 +191,6 @@ in
       #mode {
         background: #5E81AC;
         font-weight: bold;
-        font-style: italic;
       }
 
       #custom-logo {
