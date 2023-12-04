@@ -10,6 +10,31 @@
   # Since we're using fish as our shell
   programs.fish.enable = true;
 
+  # Additional system packages required.
+  environment.systemPackages = with pkgs; [
+    polkit_gnome
+  ];
+
+  # 1Password is not in home-manager, therefore needs to be configured here
+  # Additional componens need to be configured at a system level and require
+  # SUID wrappers in some cases.
+  security.polkit.enable = true;
+  services.gnome.gnome-keyring.enable = true;
+  programs.seahorse.enable = true;
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "nick" ];
+  };
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
   users.users.nick = {
     isNormalUser = true;
     home = "/home/nick";

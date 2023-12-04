@@ -22,6 +22,13 @@
       keep-outputs = true
       keep-derivations = true
     '';
+
+    # This is my public binary cache. It can be keept or removed/changed.
+    # Its typically safe to use a binary cache since the data inside is checksummed.
+    settings = {
+      substituters = ["https://nmcfaul-nixos-config.cachix.org"];
+      trusted-public-keys = ["nmcfaul-nixos-config.cachix.org-1:PVJxAC60dMCtjhAg4C1/0VVM55H7g3UYo37B6SYv7uQ="];
+    };
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -80,39 +87,11 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    # wayland
     glib
     cachix
     gnumake
     killall
-    polkit_gnome
-  ] ++ lib.optionals (currentSystemName == "vm-aarch64") [
-    # This is needed for the vmware user tools clipboard to work.
-    # You can test if you don't need this by deleting this and seeing
-    # if the clipboard sill works.
-    gtkmm3
   ];
-
-  security.polkit.enable = true;
-
-  # 1Password is not in home-manager, therefore needs to be configured here
-  # Additional componens need to be configured at a system level and require
-  # SUID wrappers in some cases.
-  services.gnome.gnome-keyring.enable = true;
-  programs.seahorse.enable = true;
-  programs._1password.enable = true;
-  programs._1password-gui = {
-    enable = true;
-    polkitPolicyOwners = [ "nick" ];
-  };
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

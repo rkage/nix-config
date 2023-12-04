@@ -22,6 +22,12 @@ switch:
 test:
 	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild test --flake ".#$(NIXNAME)"
 
+# This builds the given NixOS configuration and pushes the results to the cache
+cache:
+	nix build '.#nixosConfigurations.$(NIXNAME).config.system.build.toplevel' --json \
+		| jq -r '.[].outputs | to_entries[].value' \
+		| cachix push nmcfaul-nixos-config
+
 # bootstrap the vm
 vm/bootstrap0:
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) root@$(NIXADDR) " \

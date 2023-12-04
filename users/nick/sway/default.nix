@@ -3,7 +3,6 @@
 {
   imports = [
     ./waybar.nix
-    ./wofi.nix
   ];
 
   fonts.fontconfig.enable = true;
@@ -13,10 +12,12 @@
     wl-clipboard
     wlr-randr
     inter-ui
+    iosevka
     (nerdfonts.override {
       fonts = [
         "FiraCode"
         "JetBrainsMono"
+        "Iosevka"
       ];
     })
   ];
@@ -148,6 +149,11 @@
       base = true;
       gtk = true;
     };
+  };
+
+  programs.wofi = {
+    enable = true;
+    style = builtins.readFile ./wofi-style.css;
   };
 
   home.pointerCursor = {
