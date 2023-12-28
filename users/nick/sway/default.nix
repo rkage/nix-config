@@ -90,6 +90,16 @@
         window = {
           titlebar = false;
           border = 2;
+          commands = [
+            {
+              command = "floating enable";
+              criteria.class = "^1Password$";
+            }
+            {
+              command = "resize set 1200px 800px";
+              criteria.class = "^1Password$";
+            }
+          ];
         };
         focus = { followMouse = false; };
         gaps = {
@@ -127,6 +137,7 @@
           "4" = [
             { class = "^Chromium-browser$"; }
             { class = "^Firefox$"; }
+            { app_id = "^firefox$"; }
           ];
         };
       };

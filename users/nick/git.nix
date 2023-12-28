@@ -22,8 +22,14 @@
       color.ui = true;
       github.user = "rkage";
       init.defaultBranch = "main";
-      url."git@github.com:mcfio/".insteadOf = "https://github.com/mcfio/";
-      url."git@github.com:rkage/".insteadOf = "https://github.com/rkage/";
+      url = {
+        "git@github.com:mcfio/" = {
+          insteadOf = "https://github.com/mcfio/";
+        };
+        "git@github.com:rkage/" = {
+          insteadOf = "https://github.com/rkage/";
+        };
+      };
     };
   };
 

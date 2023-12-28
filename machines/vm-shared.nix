@@ -103,6 +103,7 @@ in
   services.dbus.enable = true;
   xdg.portal = {
     enable = true;
+    config.common.default = "*";
     wlr.enable = false;
     # gtk portal needed to make gtk apps happy
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];

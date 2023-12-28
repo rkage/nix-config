@@ -37,6 +37,8 @@ in
   # per-project flakes sourced with direnv and nix-shell, so this is
   # not a huge list.
   home.packages = with pkgs; [
+    age
+    sops
     dconf
     wget
     unzip
@@ -45,15 +47,6 @@ in
     eza
     cargo
     fzf
-    # kubectl
-    # kubectl-cnpg
-    # kubectl-view-secret
-    # fluxcd
-    # stern
-    # kubernetes-helm
-    # talosctl
-    # cilium-cli
-    gh
     grc
     htop
     btop
