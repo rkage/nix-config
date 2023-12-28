@@ -27,6 +27,7 @@ M.treesitter = {
 		"json5",
 		"yaml",
 		"vim",
+    "vimdoc",
 		"javascript",
 		"typescript",
 		"markdown",
@@ -41,9 +42,7 @@ M.treesitter = {
 }
 
 M.mason = {
-	ensure_installed = {
-		"prettier",
-	},
+	ensure_installed = {},
 }
 
 -- git support in nvimtree
