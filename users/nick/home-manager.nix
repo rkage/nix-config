@@ -1,19 +1,11 @@
 { inputs, ... }:
 
-{ config, lib, pkgs, ... }:
+{ config
+, lib
+, pkgs
+, ...
+}:
 
-let
-  # inherit (lib) mkIf;
-  # hasPackage = pname: lib.any (p: p ? pname && p.pname == pname) config.home.packages;
-  # hasExa = hasPackage "eza";
-
-  manpager = (pkgs.writeShellScriptBin "manpager" (
-    ''
-      exec ${pkgs.coreutils}/bin/cat "$@" | ${pkgs.util-linux}/bin/col -bx | ${pkgs.bat}/bin/bat --language man --style plain
-    ''
-  ));
-
-in
 {
   # Home-manager 22.11 requires this be set.
   home.stateVersion = "23.05";
@@ -44,7 +36,6 @@ in
     unzip
     ripgrep
     fd
-    eza
     cargo
     fzf
     grc
@@ -70,8 +61,6 @@ in
     LC_ALL = "en_CA.UTF-8";
     EDITOR = "nvim";
     PAGER = "less -FirSwX";
-    # MANPAGER = "${manpager}/bin/manpager";
-    # MANROFFOPT = "-c";
   };
 
   #---------------------------------------------------------------------
@@ -123,6 +112,14 @@ in
     };
   };
 
+  programs.eza = {
+    enable = true;
+    enableAliases = true;
+    extraOptions = [
+      "--group-directories-first"
+    ];
+  };
+
   programs.fish = {
     enable = true;
     interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
@@ -131,7 +128,6 @@ in
     ]));
 
     shellAbbrs = {
-      exa = "eza";
       k = "kubectl";
       kgp = "kubectl get pods";
       kga = "kubectl get pods --all-namespaces";
@@ -143,23 +139,8 @@ in
       kgno = "kubectl get nodes --sort-by=.metadata.name -o wide";
     };
     shellAliases = {
-      ls = "eza";
       cat = "bat";
-      #   ga = "git add";
-      #   gc = "git commit";
-      #   gco = "git checkout";
-      #   gcp = "git cherry-pick";
-      #   gdiff = "git diff";
-      #   gl = "git prettylog";
-      #   gp = "git push";
-      #   gs = "git status";
-      #   gt = "git tag";
-      # } // (if isLinux then {
-      #   # Two decades of using a Mac has made this such a strong memory
-      #   # that I'm just going to keep it consistent.
-      #   pbcopy = "xclip";
-      #   pbpaste = "xclip -o";
-      # } else {});
+      man = "batman";
     };
 
     plugins = [
@@ -177,9 +158,9 @@ in
   programs.bat = {
     enable = true;
     config = {
-      theme = "base16-256";
+      theme = "Solarized (dark)";
     };
-    extraPackages = with pkgs.bat-extras;  [
+    extraPackages = with pkgs.bat-extras; [
       batdiff
       batman
       batgrep
