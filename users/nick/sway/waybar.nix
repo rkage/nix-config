@@ -40,8 +40,8 @@ in
         format-icons = {
           "1" = "";
           "2" = "";
-          "3" = "";
-          "4" = "";
+          "3" = "󱃾";
+          "4" = "";
           "5" = "";
           "6" = "漣";
           "7" = "";
@@ -69,7 +69,7 @@ in
         interval = 60;
         align = 0;
         tooltip-format = "{:%B %Y}";
-        format = "  {:%OI:%M %p}";
+        format = " {:%OI:%M %p}";
         format-alt = "{:%a %b %d, %G}";
       };
       "custom/scratchpad_indicator" = {

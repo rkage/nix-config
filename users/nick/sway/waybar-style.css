@@ -4,17 +4,17 @@
 }
 
 window#waybar {
-  font-family: "Iosevka Nerd Font", "JetBrains Mono Nerd Font", sans-serif;
+  font-family: "Iosevka", "Symbols Nerd Font Mono", sans-serif;
   font-size: 12px;
-  color: #1B1F28;
+  color: #1b1f28;
   background-color: #2e3440;
-  border-bottom: 2px solid #434C5E;
+  border-bottom: 2px solid #434c5e;
   transition-property: background-color;
-  transition-duration: .5s;
+  transition-duration: 0.5s;
 }
 
 window#waybar.hidden {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 @keyframes blink {
@@ -25,53 +25,55 @@ window#waybar.hidden {
 
 #custom-logo {
   font-size: 20px;
-  color: #ECEFF4;
-  background-color: #434C5E;
-  padding-left: 7px;
-  padding-right: 12px;
+  color: #eceff4;
+  background-color: #434c5e;
+  padding-top: 2px;
+  padding-left: 4px;
+  padding-right: 6px;
 }
 
 #workspaces {
-  color: #ECEFF4;
-  background-color: #434C5E;
+  font-size: 14px;
+  color: #eceff4;
+  background-color: #434c5e;
   border-radius: 0px 12px 0px 0px;
-  padding: 4px;
-  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-right: 4px;
 }
 
 #workspaces button {
-  font-size: 14px;
-  color: #ECEFF4;
+  color: #eceff4;
   border: 0;
-  border-radius: 10px;
-  padding-left: 4px;
-  padding-right: 10px;
+  border-radius: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 #workspaces button:hover {
-  color: #ECEFF4;
-  background: #4C5668;
+  color: #eceff4;
+  background: #4c5668;
   box-shadow: inherit;
   text-shadow: inherit;
 }
 
 #workspaces button.visible {
-  background: #4C566A;
+  background: #4c566a;
 }
 
 #workspaces button.focused {
-  background: #81A1C1;
-  color: #2E3440;
+  background: #81a1c1;
+  color: #2e3440;
 }
 
 #workspaces button.urgent {
-  background: #BF616A;
-  color: #2E3440;
+  background: #bf616a;
+  color: #2e3440;
 }
 
 #workspaces button.persistent {
-  background: #EBCB8B;
-  color: #2E3440;
+  background: #ebcb8b;
+  color: #2e3440;
 }
 
 #workspaces button.current_output {
@@ -89,7 +91,7 @@ window#waybar.hidden {
 }
 
 window#waybar.empty #window {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 #custom-scratchpad_indicator,
@@ -98,7 +100,7 @@ window#waybar.empty #window {
 #window,
 #network {
   color: #d8dee9;
-  background: #3B4252;
+  background: #3b4252;
   border-radius: 12px;
   margin-top: 4px;
   margin-bottom: 6px;
@@ -111,21 +113,19 @@ window#waybar.empty #window {
 }
 
 #mode {
-  background: #5E81AC;
+  background: #5e81ac;
   font-weight: bold;
 }
 
 #tray {
-  background-color: #434C5E;
+  background-color: #434c5e;
   border-radius: 12px 0px 0px 0px;
   padding: 2px 12px;
   margin-left: 6px;
 }
 #tray > .passive {
-    -gtk-icon-effect: dim;
+  -gtk-icon-effect: dim;
 }
 #tray > .needs-attention {
-    -gtk-icon-effect: highlight;
-}
-#tray > .active {
+  -gtk-icon-effect: highlight;
 }

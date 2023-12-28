@@ -7,11 +7,14 @@ let
   # hasPackage = pname: lib.any (p: p ? pname && p.pname == pname) config.home.packages;
   # hasExa = hasPackage "eza";
 
-  manpager = (pkgs.writeShellScriptBin "manpager" (''
-    exec cat "$@" | col -bx | bat --language man --style plain
-  ''));
+  manpager = (pkgs.writeShellScriptBin "manpager" (
+    ''
+      exec ${pkgs.coreutils}/bin/cat "$@" | ${pkgs.util-linux}/bin/col -bx | ${pkgs.bat}/bin/bat --language man --style plain
+    ''
+  ));
 
-in {
+in
+{
   # Home-manager 22.11 requires this be set.
   home.stateVersion = "23.05";
 
@@ -19,7 +22,7 @@ in {
     ./nix-index.nix
     ./neovim.nix
     ./sway
-  #  ./waybar
+    #  ./waybar
   ];
 
   xdg.enable = true;
@@ -32,19 +35,22 @@ in {
   # per-project flakes sourced with direnv and nix-shell, so this is
   # not a huge list.
   home.packages = with pkgs; [
+    dconf
+    wget
+    unzip
+    ripgrep
     fd
     eza
     cargo
     fzf
-    kubectl
-    kubectl-cnpg
-    kubectl-view-secret
-    fluxcd
-    stern
-    kubernetes-helm
-    talosctl
-    terraform
-    cilium-cli
+    # kubectl
+    # kubectl-cnpg
+    # kubectl-view-secret
+    # fluxcd
+    # stern
+    # kubernetes-helm
+    # talosctl
+    # cilium-cli
     gh
     grc
     htop
@@ -55,7 +61,6 @@ in {
     pre-commit
     watch
     nodejs
-    chromium
     firefox
     python3
   ];
@@ -70,25 +75,8 @@ in {
     LC_ALL = "en_CA.UTF-8";
     EDITOR = "nvim";
     PAGER = "less -FirSwX";
-    MANPAGER = "${manpager}/bin/manpager";
-  };
-
-  # home.file.".gdbinit".source = ./gdbinit;
-  # home.file.".inputrc".source = ./inputrc;
-
-  xdg.configFile = {
-    # "sway/config".text = builtins.readFile ./sway-config;
-    # "nvim".source = "${pkgs.astronvim}";
-  #   "rofi/config.rasi".text = builtins.readFile ./rofi;
-  #
-  #   # tree-sitter parsers
-  #   "nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
-  #   "nvim/queries/proto/folds.scm".source =
-  #     "${sources.tree-sitter-proto}/queries/folds.scm";
-  #   "nvim/queries/proto/highlights.scm".source =
-  #     "${sources.tree-sitter-proto}/queries/highlights.scm";
-  #   "nvim/queries/proto/textobjects.scm".source =
-  #     ./textobjects.scm;
+    # MANPAGER = "${manpager}/bin/manpager";
+    # MANROFFOPT = "-c";
   };
 
   #---------------------------------------------------------------------
@@ -113,20 +101,29 @@ in {
       Install.WantedBy = [ "graphical-session.target" ];
     };
   };
- 
+
   #---------------------------------------------------------------------
   # Programs
   #---------------------------------------------------------------------
- 
+
+  programs.chromium = {
+    enable = true;
+    extensions = [
+      "aeblfdkhhhdcdjpifhhbdiojplfjncoa" # 1Password Extension
+      "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
+      "hjdoplcnndgiblooccencgcggcoihigg" # Terms of Service; Didn’t Read
+    ];
+  };
+
   programs.direnv = {
     enable = true;
 
     config = {
       whitelist = {
-        prefix= [
+        prefix = [
           "$HOME/Projects"
         ];
-        exact = ["$HOME/.envrc"];
+        exact = [ "$HOME/.envrc" ];
       };
     };
   };
@@ -158,21 +155,21 @@ in {
     shellAliases = {
       ls = "eza";
       cat = "bat";
-    #   ga = "git add";
-    #   gc = "git commit";
-    #   gco = "git checkout";
-    #   gcp = "git cherry-pick";
-    #   gdiff = "git diff";
-    #   gl = "git prettylog";
-    #   gp = "git push";
-    #   gs = "git status";
-    #   gt = "git tag";
-    # } // (if isLinux then {
-    #   # Two decades of using a Mac has made this such a strong memory
-    #   # that I'm just going to keep it consistent.
-    #   pbcopy = "xclip";
-    #   pbpaste = "xclip -o";
-    # } else {});
+      #   ga = "git add";
+      #   gc = "git commit";
+      #   gco = "git checkout";
+      #   gcp = "git cherry-pick";
+      #   gdiff = "git diff";
+      #   gl = "git prettylog";
+      #   gp = "git push";
+      #   gs = "git status";
+      #   gt = "git tag";
+      # } // (if isLinux then {
+      #   # Two decades of using a Mac has made this such a strong memory
+      #   # that I'm just going to keep it consistent.
+      #   pbcopy = "xclip";
+      #   pbpaste = "xclip -o";
+      # } else {});
     };
 
     plugins = [
@@ -194,12 +191,12 @@ in {
     };
     extraPackages = with pkgs.bat-extras;  [
       batdiff
-      # batman
+      batman
       batgrep
       batwatch
     ];
   };
-  
+
   programs.git = {
     enable = true;
     userName = "Nick M";
@@ -229,20 +226,4 @@ in {
     extraConfig = builtins.readFile ./wezterm.lua;
   };
 
-  # programs.alacritty = {
-  #   enable = !isWSL;
-  #
-  #   settings = {
-  #     env.TERM = "xterm-256color";
-  #
-  #     key_bindings = [
-  #       { key = "K"; mods = "Command"; chars = "ClearHistory"; }
-  #       { key = "V"; mods = "Command"; action = "Paste"; }
-  #       { key = "C"; mods = "Command"; action = "Copy"; }
-  #       { key = "Key0"; mods = "Command"; action = "ResetFontSize"; }
-  #       { key = "Equals"; mods = "Command"; action = "IncreaseFontSize"; }
-  #       { key = "Subtract"; mods = "Command"; action = "DecreaseFontSize"; }
-  #     ];
-  #   };
-  # };
 }

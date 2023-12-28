@@ -1,6 +1,6 @@
-{ lib, stdenv, pkgs, ... }:
+{ lib, stdenv, pkgs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nvchad";
   version = "2.0.0";
 

@@ -1,4 +1,6 @@
 window {
+  font-family: "Noto Sans", sans-serif;
+  font-size: 14px;
   margin: 0px;
   border: 1px solid #5e81ac;
   background-color: #2e3440;
@@ -29,7 +31,7 @@ window {
 }
 
 #text {
-  margin: 5px;
+  margin: 4px;
   border: none;
   color: #d8dee9;
 }
