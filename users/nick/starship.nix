@@ -28,14 +28,14 @@ with lib;
         format = "@ [$hostname]($style) ";
         style = "blue";
       };
-      character.success_symbol = "[❯](purple)";
-      character.error_symbol = "[✗](red)";
+      character.success_symbol = "[󰅂](purple)";
+      character.error_symbol = "[󰖭](red)";
       directory = {
         style = "blue";
         truncation_length = 5;
         truncate_to_repo = true;
         truncation_symbol = "../";
-        read_only = "";
+        read_only = " ";
       };
       git_branch.format = "[$branch]($style) ";
       git_branch.style = "yellow";

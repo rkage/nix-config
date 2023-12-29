@@ -15,10 +15,12 @@
         },
 
         -- font
-        font = wezterm.font({
-          family = "MonoLisa",
-          weight = "Medium",
-          harfbuzz_features = { "zero", "ss03", "ss07", "ss10", "ss11", "ss13", "ss15", "ss18" },
+        font = wezterm.font_with_fallback({
+          { 
+            family = "MonoLisa", weight = "Medium",
+            harfbuzz_features = { "zero", "ss02", "ss04", "ss07", "ss10", "ss11", "ss13", "ss15", "ss17", "ss18" }
+          },
+          { family = "Symbols Nerd Font Mono" }
         }),
         font_size = 9.0,
         underline_position = "-3px",

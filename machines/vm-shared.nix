@@ -126,7 +126,7 @@ in
       inter-ui
       iosevka
       noto-fonts
-      nerdfonts
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
     ];
     fontconfig = {
       defaultFonts.monospace = [ "Noto Sans Mono" "Symbols Nerd Font Mono" ];
