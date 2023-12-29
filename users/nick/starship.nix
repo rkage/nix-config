@@ -28,8 +28,9 @@ with lib;
         format = "@ [$hostname]($style) ";
         style = "blue";
       };
-      character.success_symbol = "[󰅂](purple)";
-      character.error_symbol = "[󰖭](red)";
+
+      character.success_symbol = "[❯](purple)";
+      character.error_symbol = "[✗](red)";
       directory = {
         style = "blue";
         truncation_length = 5;

@@ -8,21 +8,22 @@
         -- bell
         audible_bell = "Disabled",
         visual_bell = {
-          fade_in_function = "EaseIn",
-          fade_in_duration_ms = 100,
-          fade_out_function = "EaseOut",
-          fade_out_duration_ms = 100,
+          fade_in_duration_ms = 75,
+          fade_out_duration_ms = 75,
+          target = "CursorColor"
         },
 
         -- font
         font = wezterm.font_with_fallback({
           { 
-            family = "MonoLisa", weight = "Medium",
+            family = "MonoLisa",
+            weight = "Medium",
             harfbuzz_features = { "zero", "ss02", "ss04", "ss07", "ss10", "ss11", "ss13", "ss15", "ss17", "ss18" }
           },
           { family = "Symbols Nerd Font Mono" }
         }),
-        font_size = 9.0,
+        font_size = 12.0,
+        dpi = 72.0,
         underline_position = "-3px",
         underline_thickness = "150%",
 
