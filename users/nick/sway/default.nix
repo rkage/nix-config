@@ -174,6 +174,6 @@
 
   home.sessionVariables = {
     # NIXOS_OZONE_WL = 1;
-    WRL_NO_HARDWARE_CURSORS = 1;
+    # WRL_NO_HARDWARE_CURSORS = 1;
   };
 }

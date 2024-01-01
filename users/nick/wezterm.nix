@@ -16,10 +16,10 @@
         -- font
         font = wezterm.font({
           family = "MonoLisa",
-          harfbuzz_features = { "zero", "ss02", "ss04", "ss07", "ss10", "ss11", "ss13", "ss15", "ss17", "ss18" }
+          harfbuzz_features = { "zero", "ss02", "ss03", "ss07", "ss10", "ss11", "ss13", "ss15", "ss17", "ss18" }
         }),
         font_size = 12.0,
-        dpi = 72.666666667,
+        dpi = 72.0,
         underline_position = "-3px",
         underline_thickness = "150%",
 
@@ -30,14 +30,14 @@
           left = "4px",
           right = "4px",
           top = "4px",
-          bottom = "0",
+          bottom = "0"
         },
 
         -- colors
         color_scheme = "Nord (base16)",
         colors = {
           visual_bell = "#202020",
-          background = "#191c1f",
+          background = "#191c1f"
         },
 
         -- general styling
@@ -48,13 +48,14 @@
         -- general config
         clean_exit_codes = { 130 },
         automatically_reload_config = true,
+        front_end = "OpenGL",
 
         leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 },
         keys = {
           {
             key = "h",
             mods = "LEADER",
-            action = wezterm.action.SplitPane({ direction = "Down", size = { Percent = 25 } }),
+            action = wezterm.action.SplitPane({ direction = "Down", size = { Percent = 25 } })
           },
         },
       }

@@ -5,7 +5,7 @@
   ];
 
   # Setup qemu so we can run x86_64 binaries
-  boot.binfmt.emulatedSystems = ["x86_64-linux"];
+  boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
 
   # Interface is this on M2
   networking.interfaces.ens160.useDHCP = true;
@@ -17,11 +17,11 @@
   # This works through our custom module imported above
   virtualisation.vmware.guest.enable = true;
 
-  hardware = {
-    opengl = {
-      enable = true;
-      driSupport = true;
-    };
+  # Enable OpenGL and Mesa GPU acceleration
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    extraPackages = [ pkgs.mesa.drivers ];
   };
 
   # Share our host filesystem

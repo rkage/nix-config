@@ -96,7 +96,7 @@ in
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  # setup windowing environment
+  # Setup windowing environment
 
   # xdg-desktop-portal works by exposing a series of D-Bus interfaces
   # known as portals under a well-known name  
@@ -109,7 +109,6 @@ in
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
-  # Setup greetd and tuigreet for simplified login screen
   environment.variables = {
     WLR_NO_HARDWARE_CURSORS = "1";
   };
@@ -117,7 +116,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = false;
 
-  # Managed Fons, managed separately from other packages.
+  # Managed Fonts, managed separately from other packages.
   fonts = {
     fontDir.enable = true;
 
