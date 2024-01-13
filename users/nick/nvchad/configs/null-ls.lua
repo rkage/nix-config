@@ -16,6 +16,9 @@ local sources = {
 	-- nix
 	b.formatting.nixpkgs_fmt,
 
+	-- terraform
+	b.formatting.terraform_fmt,
+
 	-- config
 	b.formatting.taplo,
 }

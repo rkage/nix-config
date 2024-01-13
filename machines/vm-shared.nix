@@ -125,6 +125,7 @@ in
       inter-ui
       iosevka
       noto-fonts
+      jetbrains-mono
       (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
     ];
     fontconfig = {
