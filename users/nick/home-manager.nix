@@ -15,11 +15,19 @@
     ./wezterm.nix
     ./nix-index.nix
     ./neovim.nix
-    ./sway
+    # ./sway
+    ./i3
     ./git.nix
   ];
 
   xdg.enable = true;
+
+  services.picom = {
+    enable = true;
+    opacityRules = [
+      "98:class_g = 'org.wezfurlong.wezterm'"
+    ];
+  };
 
   #---------------------------------------------------------------------
   # Packages
@@ -166,5 +174,13 @@
       batgrep
       batwatch
     ];
+  };
+
+  home.pointerCursor = {
+    package = pkgs.nordzy-cursor-theme;
+    name = "Nordzy-cursors";
+    size = 24;
+    x11.enable = true;
+    gtk.enable = true;
   };
 }

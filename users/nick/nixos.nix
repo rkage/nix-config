@@ -18,13 +18,27 @@
   # 1Password is not in home-manager, therefore needs to be configured here
   # Additional componens need to be configured at a system level and require
   # SUID wrappers in some cases.
-  security.polkit.enable = true;
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
   programs._1password.enable = true;
   programs._1password-gui = {
     enable = true;
     polkitPolicyOwners = [ "nick" ];
+  };
+  security.polkit = {
+    enable = true;
+    extraConfig = ''
+      polkit.addRule(function (action, subject) {
+        if ((
+          action.id == "com.1password.1Password.unlock" ||
+          action.id == "com.1password.1Password.authorizeSshAgent"
+        ) &&
+          subject.isInGroup("wheel")
+        ) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
   };
 
   # Some programs need SUID wrappers, can be configured further or are

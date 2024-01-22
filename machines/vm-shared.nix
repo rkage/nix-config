@@ -1,44 +1,11 @@
 { config, pkgs, lib, currentSystem, currentSystemName, ... }:
 
-let
-  # bash script to let dbus know about important env variables and
-  # propagate them to relevent services run at the end of sway config
-  dbus-sway-environment = pkgs.writeTextFile {
-    name = "dbus-sway-environment";
-    destination = "/bin/dbus-sway-environment";
-    executable = true;
-
-    text = ''
-      dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-      systemctl --user stop xdg-desktop-portal xdg-desktop-portal-gtk
-      systemctl --user start xdg-desktop-portal xdg-desktop-portal-gtk
-    '';
-  };
-  # for gsettings to work, we need to tell it where the schemas are
-  # using the XDG_DATA_DIR environment variable
-  configure-gtk = pkgs.writeTextFile {
-    name = "configure-gtk";
-    destination = "/bin/configure-gtk";
-    executable = true;
-    text =
-      let
-        schema = pkgs.gsettings-desktop-schemas;
-        datadir = "${schema}/share/gsettings-schemas/${schema.name}";
-      in
-      ''
-        export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
-        gnome_schema=org.gnome.desktop.interface
-        gsettings set $gnome_schema gtk-theme 'Nordic'
-      '';
-  };
-in
 {
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Remove unnecessary pre-installed packages
   environment.defaultPackages = [ ];
-  services.xserver.desktopManager.xterm.enable = false;
 
   # Nix settings, auto cleanup and enable flakes
   nix = {
@@ -66,6 +33,8 @@ in
   # Use the systemd-boot EFI boot loader.
   boot = {
     tmp.cleanOnBoot = true;
+    consoleLogLevel = 0;
+    initrd.verbose = false;
     plymouth.enable = true;
     loader = {
       systemd-boot.enable = true;
@@ -74,6 +43,7 @@ in
       systemd-boot.consoleMode = "0";
       efi.canTouchEfiVariables = true;
     };
+    kernelParams = [ "quiet" "splash" "rd.systemd.show_status=false" "rd.udev.log_level=3" "udev.log_priority=3" "boot.shell_on_fail" ];
   };
 
   # Define your hostname.
@@ -96,22 +66,45 @@ in
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  # Setup windowing environment
+  # Setup windowing environment, using X11 until better support is available (i.e. copy/paste)
+  services.xserver = {
+    enable = true;
+    layout = "us";
+    dpi = 96;
+    resolutions = [
+      { x = 1920; y = 1080; }
+    ];
+
+    desktopManager = {
+      xterm.enable = false;
+      wallpaper.mode = "fill";
+    };
+
+    displayManager = {
+      sessionCommands = ''
+        ${pkgs.xorg.xset}/bin/xset r rate 250 35
+      '';
+    };
+
+    windowManager = {
+      i3.enable = true;
+    };
+  };
 
   # xdg-desktop-portal works by exposing a series of D-Bus interfaces
   # known as portals under a well-known name  
-  services.dbus.enable = true;
-  xdg.portal = {
-    enable = true;
-    config.common.default = "*";
-    wlr.enable = false;
-    # gtk portal needed to make gtk apps happy
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
-
-  environment.variables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-  };
+  # services.dbus.enable = true;
+  # xdg.portal = {
+  #   enable = true;
+  #   config.common.default = "*";
+  #   wlr.enable = false;
+  #   # gtk portal needed to make gtk apps happy
+  #   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  # };
+  #
+  # environment.variables = {
+  #   WLR_NO_HARDWARE_CURSORS = "1";
+  # };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = false;
@@ -133,16 +126,19 @@ in
     };
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    dbus-sway-environment
-    configure-gtk
     glib # gsettings
     nordic # gtk-theme
     cachix
     gnumake
     killall
+    xclip
+    (writeShellScriptBin "xrandr-auto" ''
+      xrandr --output Virtual-1 --auto
+    '')
+  ] ++ lib.optionals (currentSystemName == "vm-aarch64") [
+    gtkmm3
   ];
 
   # Enable the OpenSSH daemon.

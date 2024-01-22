@@ -18,13 +18,13 @@
           family = "MonoLisa",
           harfbuzz_features = { "zero", "ss02", "ss03", "ss07", "ss10", "ss11", "ss13", "ss15", "ss17", "ss18" }
         }),
-        font_size = 12.0,
-        dpi = 72.0,
+        font_size = 9.0,
         underline_position = "-3px",
         underline_thickness = "150%",
 
         -- window
-        window_background_opacity = 0.98,
+        -- window_background_opacity = 0.98,
+        window_background_opacity = 1.0,
         window_close_confirmation = "NeverPrompt",
         window_padding = {
           left = "4px",

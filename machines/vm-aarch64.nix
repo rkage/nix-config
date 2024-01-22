@@ -16,6 +16,7 @@
 
   # This works through our custom module imported above
   virtualisation.vmware.guest.enable = true;
+  virtualisation.vmware.guest.headless = true;
 
   # Enable OpenGL and Mesa GPU acceleration
   hardware.opengl = {
