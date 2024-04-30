@@ -37,4 +37,3 @@ in {
     settings.default_session.command = sway-greetd (lib.getExe config.programs.regreet.package);
   };
 }
-

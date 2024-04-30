@@ -13,7 +13,7 @@
 
     ../shared
     ../shared/users/nick
-    
+
     ../shared/quietboot.nix
     ../shared/greetd.nix
     ../shared/pipewire.nix
@@ -39,7 +39,7 @@
   };
 
   services.hardware.openrgb.enable = true;
-  services.udev.extraRules = (builtins.readFile "${pkgs.openrgb}/lib/udev/rules.d/60-openrgb.rules");
+  services.udev.extraRules = builtins.readFile "${pkgs.openrgb}/lib/udev/rules.d/60-openrgb.rules";
   hardware.opengl = {
     enable = true;
     driSupport = true;
@@ -51,4 +51,3 @@
 
   system.stateVersion = "23.05";
 }
-

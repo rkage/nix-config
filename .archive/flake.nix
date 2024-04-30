@@ -16,18 +16,21 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @inputs:
-    let
-      overlays = [ ];
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    ...
+  } @ inputs: let
+    overlays = [];
 
-      mkSystem = import ./lib/mksystem.nix {
-        inherit overlays nixpkgs inputs;
-      };
-    in
-    {
-      nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
-        system = "aarch64-linux";
-        user = "nick";
-      };
+    mkSystem = import ./lib/mksystem.nix {
+      inherit overlays nixpkgs inputs;
     };
+  in {
+    nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
+      system = "aarch64-linux";
+      user = "nick";
+    };
+  };
 }

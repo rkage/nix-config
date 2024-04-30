@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, pkgs
+{
+  lib,
+  stdenv,
+  pkgs,
 }:
-
 stdenv.mkDerivation {
   pname = "nvchad";
   version = "2.0.0";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     description = "NvChad";
     homepage = "https://github.com/NvChad/NvChad";
     platforms = platforms.all;
-    maintainers = [ maintainers.toutaboc ];
+    maintainers = [maintainers.toutaboc];
     license = licenses.gpl3;
   };
 }

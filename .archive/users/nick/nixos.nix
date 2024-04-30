@@ -1,8 +1,10 @@
-{ pkgs, inputs, ... }:
-
 {
+  pkgs,
+  inputs,
+  ...
+}: {
   # https://github.com/nix-community/home-manager/pull/2408
-  environment.pathsToLink = [ "/share/fish" ];
+  environment.pathsToLink = ["/share/fish"];
 
   # Add ~/.local/bin to PATH
   environment.localBinInPath = true;
@@ -23,7 +25,7 @@
   programs._1password.enable = true;
   programs._1password-gui = {
     enable = true;
-    polkitPolicyOwners = [ "nick" ];
+    polkitPolicyOwners = ["nick"];
   };
   security.polkit = {
     enable = true;
@@ -52,7 +54,7 @@
   users.users.nick = {
     isNormalUser = true;
     home = "/home/nick";
-    extraGroups = [ "docker" "wheel" ];
+    extraGroups = ["docker" "wheel"];
     shell = pkgs.fish;
     hashedPassword = "$y$j9T$tXwNw3NZpZgJiDoqinOck/$YK4gafuOdGYobe79UDKbe2eqgEamdooSzXfIu7E5e1.";
     openssh.authorizedKeys.keys = [

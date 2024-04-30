@@ -11,8 +11,15 @@ in {
   services.swayidle = {
     enable = true;
     timeouts = [
-      { timeout = lockTime; command = "${swaylock} --daemonize --grace 15"; }
-      { timeout = lockTime + 40; command = "${swaymsg} 'output * dpms off'"; resumeCommand = "${swaymsg} 'output * dpms on'"; }
+      {
+        timeout = lockTime;
+        command = "${swaylock} --daemonize --grace 15";
+      }
+      {
+        timeout = lockTime + 40;
+        command = "${swaymsg} 'output * dpms off'";
+        resumeCommand = "${swaymsg} 'output * dpms on'";
+      }
     ];
   };
 }

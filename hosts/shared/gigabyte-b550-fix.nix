@@ -1,6 +1,9 @@
-{ pkgs, lib, ... } :
-
-# From https://github.com/NixOS/nixos-hardware/blob/master/gigabyte/b550/b550-fix-suspend.nix using until 
+{
+  pkgs,
+  lib,
+  ...
+}:
+# From https://github.com/NixOS/nixos-hardware/blob/master/gigabyte/b550/b550-fix-suspend.nix using until
 # it has been merged into the flake.
 {
   systemd.services.bugfixSuspend-GPP0 = {
@@ -13,9 +16,8 @@
       User = "root"; # root may not be necessary
       # check for gppN, disable if enabled
       # lifted from  https://www.reddit.com/r/gigabyte/comments/p5ewjn/comment/ksbm0mb/ /u/Demotay
-      ExecStart = "-${pkgs.bash}/bin/bash -c 'if grep 'GPP0' /proc/acpi/wakeup | grep -q 'enabled'; then echo 'GPP0' > /proc/acpi/wakeup; fi'"; 
-      RemainAfterExit = "yes";  # required to not toggle when `nixos-rebuild switch` is ran
-      
+      ExecStart = "-${pkgs.bash}/bin/bash -c 'if grep 'GPP0' /proc/acpi/wakeup | grep -q 'enabled'; then echo 'GPP0' > /proc/acpi/wakeup; fi'";
+      RemainAfterExit = "yes"; # required to not toggle when `nixos-rebuild switch` is ran
     };
     wantedBy = ["multi-user.target"];
   };
@@ -33,5 +35,4 @@
     };
     wantedBy = ["multi-user.target"];
   };
-
 }

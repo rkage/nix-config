@@ -11,5 +11,4 @@
   ];
 
   # wallpaper = lib.mkDefault pkgs.wallpapers.rick-nord-wallpaper;
-
 }

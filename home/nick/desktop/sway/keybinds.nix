@@ -16,7 +16,13 @@
     };
 
     # Helpers
-    mapDirection = { prefixKey ? null, leftCmd, downCmd, upCmd, rightCmd }:
+    mapDirection = {
+      prefixKey ? null,
+      leftCmd,
+      downCmd,
+      upCmd,
+      rightCmd,
+    }:
       with lib.strings; {
         # Arrow keys
         "${optionalString (prefixKey != null) "${prefixKey}+"}Left" = leftCmd;
@@ -31,22 +37,26 @@
       };
   in {
     keybindings = lib.mkOptionDefault {
-      "${mod}+r"      = ''mode "${resizeMode}"'';
+      "${mod}+r" = ''mode "${resizeMode}"'';
       "${mod}+Escape" = ''mode "${powerManagementMode}"'';
-      "${mod}+p"      = ''mode "${displayLayoutMode}"'';
+      "${mod}+p" = ''mode "${displayLayoutMode}"'';
     };
     modes = {
-      ${resizeMode} = (mapDirection {
-        upCmd = "resize shrink height 10px or 10ppt";
-        downCmd = "resize grow height 10px or 10ppt";
-        leftCmd = "resize shrink width 10px or 10ppt";
-        rightCmd = "resize grow width 10px or 10ppt";
-      }) // exitMode;
-      ${powerManagementMode} = {
-        e = "mode default, exec loginctl terminate-session $XDG_SESSION_ID";
-        "Shift+r" = "mode default, exec systemctl reboot";
-        "Shift+s" = "mode default, exec systemctl poweroff";
-      } // exitMode;
+      ${resizeMode} =
+        (mapDirection {
+          upCmd = "resize shrink height 10px or 10ppt";
+          downCmd = "resize grow height 10px or 10ppt";
+          leftCmd = "resize shrink width 10px or 10ppt";
+          rightCmd = "resize grow width 10px or 10ppt";
+        })
+        // exitMode;
+      ${powerManagementMode} =
+        {
+          e = "mode default, exec loginctl terminate-session $XDG_SESSION_ID";
+          "Shift+r" = "mode default, exec systemctl reboot";
+          "Shift+s" = "mode default, exec systemctl poweroff";
+        }
+        // exitMode;
     };
   };
 }

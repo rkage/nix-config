@@ -1,12 +1,9 @@
-{ inputs, ... }:
-
-{ config
-, lib
-, pkgs
-, ...
-}:
-
-{
+{inputs, ...}: {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # Home-manager 22.11 requires this be set.
   home.stateVersion = "23.05";
 
@@ -80,8 +77,8 @@
     user.services.polkit-gnome-authentication-agent-1 = {
       Unit = {
         Description = "polkit-gnome-authentication-agent-1";
-        After = [ "graphical-session-pre.target" ];
-        PartOf = [ "graphical-session.target" ];
+        After = ["graphical-session-pre.target"];
+        PartOf = ["graphical-session.target"];
       };
       Service = {
         Type = "simple";
@@ -90,7 +87,7 @@
         RestartSec = 1;
         TimeoutStopSec = 10;
       };
-      Install.WantedBy = [ "graphical-session.target" ];
+      Install.WantedBy = ["graphical-session.target"];
     };
   };
 
@@ -115,7 +112,7 @@
         prefix = [
           "$HOME/Projects"
         ];
-        exact = [ "$HOME/.envrc" ];
+        exact = ["$HOME/.envrc"];
       };
     };
   };
@@ -130,10 +127,10 @@
 
   programs.fish = {
     enable = true;
-    interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
+    interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" [
       (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
-    ]));
+    ]);
 
     shellAbbrs = {
       k = "kubectl";
@@ -152,10 +149,22 @@
     };
 
     plugins = [
-      { name = "grc"; src = pkgs.fishPlugins.grc.src; }
-      { name = "autopair"; src = pkgs.fishPlugins.autopair.src; }
-      { name = "forgit"; src = pkgs.fishPlugins.forgit.src; }
-      { name = "fzf-fish"; src = pkgs.fishPlugins.fzf-fish.src; }
+      {
+        name = "grc";
+        src = pkgs.fishPlugins.grc.src;
+      }
+      {
+        name = "autopair";
+        src = pkgs.fishPlugins.autopair.src;
+      }
+      {
+        name = "forgit";
+        src = pkgs.fishPlugins.forgit.src;
+      }
+      {
+        name = "fzf-fish";
+        src = pkgs.fishPlugins.fzf-fish.src;
+      }
     ];
   };
 

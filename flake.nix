@@ -46,7 +46,7 @@
   in {
     inherit lib;
 
-    overlays = import ./overlays { inherit inputs outputs; };
+    overlays = import ./overlays {inherit inputs outputs;};
 
     # packages = forEachSystem (pkgs: import ./pkgs { inherit pkgs; });
 

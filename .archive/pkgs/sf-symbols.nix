@@ -1,10 +1,10 @@
-{ lib
-, pkgs
-, fetchurl
-, stdenv
-, full ? false
+{
+  lib,
+  pkgs,
+  fetchurl,
+  stdenv,
+  full ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sf-symbols";
   version = "5";
@@ -15,12 +15,16 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = ".";
-  buildInputs = [ pkgs.undmg pkgs.p7zip ];
+  buildInputs = [pkgs.undmg pkgs.p7zip];
   installPhase = ''
     7z x 'SF Symbols.pkg'
     7z x 'Payload~'
     mkdir -p $out/share/fonts
-    cp ./Library/Fonts/${ if full then "*" else "SF-Pro.ttf" } $out/share/fonts
+    cp ./Library/Fonts/${
+      if full
+      then "*"
+      else "SF-Pro.ttf"
+    } $out/share/fonts
   '';
 
   meta = with lib; {

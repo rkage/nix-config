@@ -1,11 +1,16 @@
-{ config, pkgs, lib, currentSystem, currentSystemName, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  currentSystem,
+  currentSystemName,
+  ...
+}: {
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Remove unnecessary pre-installed packages
-  environment.defaultPackages = [ ];
+  environment.defaultPackages = [];
 
   # Nix settings, auto cleanup and enable flakes
   nix = {
@@ -25,8 +30,8 @@
     # This is my public binary cache. It can be keept or removed/changed.
     # Its typically safe to use a binary cache since the data inside is checksummed.
     settings = {
-      substituters = [ "https://nmcfaul-nixos-config.cachix.org" ];
-      trusted-public-keys = [ "nmcfaul-nixos-config.cachix.org-1:PVJxAC60dMCtjhAg4C1/0VVM55H7g3UYo37B6SYv7uQ=" ];
+      substituters = ["https://nmcfaul-nixos-config.cachix.org"];
+      trusted-public-keys = ["nmcfaul-nixos-config.cachix.org-1:PVJxAC60dMCtjhAg4C1/0VVM55H7g3UYo37B6SYv7uQ="];
     };
   };
 
@@ -43,7 +48,7 @@
       systemd-boot.consoleMode = "0";
       efi.canTouchEfiVariables = true;
     };
-    kernelParams = [ "quiet" "splash" "rd.systemd.show_status=false" "rd.udev.log_level=3" "udev.log_priority=3" "boot.shell_on_fail" ];
+    kernelParams = ["quiet" "splash" "rd.systemd.show_status=false" "rd.udev.log_level=3" "udev.log_priority=3" "boot.shell_on_fail"];
   };
 
   # Define your hostname.
@@ -72,7 +77,10 @@
     layout = "us";
     dpi = 96;
     resolutions = [
-      { x = 1920; y = 1080; }
+      {
+        x = 1920;
+        y = 1080;
+      }
     ];
 
     desktopManager = {
@@ -92,7 +100,7 @@
   };
 
   # xdg-desktop-portal works by exposing a series of D-Bus interfaces
-  # known as portals under a well-known name  
+  # known as portals under a well-known name
   # services.dbus.enable = true;
   # xdg.portal = {
   #   enable = true;
@@ -119,27 +127,29 @@
       iosevka
       noto-fonts
       jetbrains-mono
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+      (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
     ];
     fontconfig = {
-      defaultFonts.monospace = [ "Noto Sans Mono" "Symbols Nerd Font Mono" ];
+      defaultFonts.monospace = ["Noto Sans Mono" "Symbols Nerd Font Mono"];
     };
   };
 
   # List packages installed in system profile.
-  environment.systemPackages = with pkgs; [
-    glib # gsettings
-    nordic # gtk-theme
-    cachix
-    gnumake
-    killall
-    xclip
-    (writeShellScriptBin "xrandr-auto" ''
-      xrandr --output Virtual-1 --auto
-    '')
-  ] ++ lib.optionals (currentSystemName == "vm-aarch64") [
-    gtkmm3
-  ];
+  environment.systemPackages = with pkgs;
+    [
+      glib # gsettings
+      nordic # gtk-theme
+      cachix
+      gnumake
+      killall
+      xclip
+      (writeShellScriptBin "xrandr-auto" ''
+        xrandr --output Virtual-1 --auto
+      '')
+    ]
+    ++ lib.optionals (currentSystemName == "vm-aarch64") [
+      gtkmm3
+    ];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

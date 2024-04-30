@@ -10,13 +10,15 @@ in {
   users.users.nick = {
     isNormalUser = true;
     shell = pkgs.fish;
-    extraGroups = [
-      "wheel"
-      "video"
-      "audio"
-    ] ++ ifTheyExist [
-      "i2c"
-    ];
+    extraGroups =
+      [
+        "wheel"
+        "video"
+        "audio"
+      ]
+      ++ ifTheyExist [
+        "i2c"
+      ];
     hashedPasswordFile = config.sops.secrets.nick-password.path;
     packages = [
       pkgs.home-manager
@@ -35,7 +37,7 @@ in {
   programs._1password.enable = true;
   programs._1password-gui = {
     enable = true;
-    polkitPolicyOwners = [ "nick" ];
+    polkitPolicyOwners = ["nick"];
   };
 
   security.polkit = {

@@ -1,11 +1,10 @@
-{ pkgs, ... }: {
-
+{pkgs, ...}: {
   home.packages = with pkgs; [
     inter-ui
     iosevka
     noto-fonts
     jetbrains-mono
-    (nerdfonts.override { fonts = ["NerdFontsSymbolsOnly" ]; })
+    (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
   ];
   fonts.fontconfig.enable = true;
 

@@ -8,7 +8,7 @@
         prefix = [
           "~/Projects"
         ];
-        exact = [ "~/.envrc" ];
+        exact = ["~/.envrc"];
       };
     };
   };
