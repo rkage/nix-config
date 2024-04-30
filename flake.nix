@@ -1,33 +1,73 @@
 {
-  description = "NixOS systems and tools";
+  description = "My NixOS configuration";
 
   inputs = {
-    # Primary nixpkgs repository is pinned to the latest release.
-    # Updating this will change all system packages.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    # Nix ecosystem
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
 
-    # Configure the unstable nixpkgs repo for some packages.
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nix = {
+      url = "github:nixos/nix/2.21-maintenance";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
 
-    # Home Manager
+    hardware.url = "github:nixos/nixos-hardware";
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @inputs:
-    let
-      overlays = [ ];
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    ...
+  } @ inputs: let
+    inherit (self) outputs;
+    lib = nixpkgs.lib // home-manager.lib;
+    systems = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
+    pkgsFor = lib.genAttrs systems (
+      system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
+    );
+  in {
+    inherit lib;
 
-      mkSystem = import ./lib/mksystem.nix {
-        inherit overlays nixpkgs inputs;
-      };
-    in
-    {
-      nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
-        system = "aarch64-linux";
-        user = "nick";
+    overlays = import ./overlays { inherit inputs outputs; };
+
+    # packages = forEachSystem (pkgs: import ./pkgs { inherit pkgs; });
+
+    nixosConfigurations = {
+      # Main desktop B550-DS3H
+      nicks-pc = lib.nixosSystem {
+        modules = [./hosts/nicks-pc];
+        specialArgs = {
+          inherit inputs outputs;
+        };
       };
     };
+
+    homeConfigurations = {
+      "nick@nicks-pc" = lib.homeManagerConfiguration {
+        modules = [./home/nick/nicks-pc.nix];
+        pkgs = pkgsFor.x86_64-linux;
+        extraSpecialArgs = {
+          inherit inputs outputs;
+        };
+      };
+    };
+  };
 }
