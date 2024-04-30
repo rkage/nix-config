@@ -19,15 +19,15 @@ in {
       ++ ifTheyExist [
         "i2c"
       ];
-    hashedPasswordFile = config.sops.secrets.nick-password.path;
+    hashedPasswordFile = config.sops.secrets.initialPassword.path;
     packages = [
       pkgs.home-manager
       pkgs.polkit_gnome
     ];
   };
 
-  sops.secrets.nick-password = {
-    file = ../../secrets.sops.yaml;
+  sops.secrets.initialPassword = {
+    sopsFile = ./secrets.sops.yaml;
     neededForUsers = true;
   };
 

@@ -5,6 +5,7 @@
 }: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
+    inputs.sops-nix.nixosModules.sops
     ./fish.nix
     ./locale.nix
     ./nix.nix
@@ -16,6 +17,8 @@
   home-manager.extraSpecialArgs = {
     inherit inputs outputs;
   };
+
+  sops.age.keyFile = "~/.config/sops/age/keys.txt";
 
   nixpkgs = {
     overlays = builtins.attrValues outputs.overlays;
