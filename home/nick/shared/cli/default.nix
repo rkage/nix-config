@@ -14,13 +14,17 @@
   home.packages = with pkgs; [
     # dev utils - will go in neovim
     nodejs
-    nil
+    nixd
+    alejandra
     gcc
 
     # kubernetes
     kubectl
     kubecolor
     talosctl
+
+    # terraform
+    terraform
 
     # utilities
     age

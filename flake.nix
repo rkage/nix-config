@@ -40,7 +40,7 @@
       "x86_64-linux"
       "aarch64-linux"
     ];
-    forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
+    # forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
     pkgsFor = lib.genAttrs systems (
       system:
         import nixpkgs {

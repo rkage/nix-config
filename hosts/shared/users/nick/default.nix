@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  lib,
   ...
 }: let
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
@@ -19,14 +18,14 @@ in {
       ++ ifTheyExist [
         "i2c"
       ];
-    hashedPasswordFile = config.sops.secrets.initialPassword.path;
+    hashedPasswordFile = config.sops.secrets.user-password.path;
     packages = [
       pkgs.home-manager
       pkgs.polkit_gnome
     ];
   };
 
-  sops.secrets.initialPassword = {
+  sops.secrets.user-password = {
     sopsFile = ./secrets.sops.yaml;
     neededForUsers = true;
   };
