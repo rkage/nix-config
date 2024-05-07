@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   inputs,
   ...
@@ -26,27 +25,23 @@
 
   boot = {
     kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+    kernelParams = ["amd_pstate=active" "acpi_enforce_resources=lax"];
   };
 
-  # systemd.sleep.extraConfig = ''
-  #   AllowSuspend=yes
-  #   AllowHibernation=no
-  #   AllowSuspendThenHibernate=no
-  # '';
+  services.logind.extraConfig = ''
+    IdleAction=suspend
+    IdleActionSec=3600
+  '';
 
   programs = {
     dconf.enable = true;
   };
 
+  hardware.i2c.enable = true;
   services.hardware.openrgb.enable = true;
   services.udev.extraRules = builtins.readFile "${pkgs.openrgb}/lib/udev/rules.d/60-openrgb.rules";
   hardware.opengl = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [
-      vulkan-validation-layers
-    ];
   };
 
   system.stateVersion = "23.05";

@@ -13,7 +13,6 @@
       width = 550;
       height = 420;
       allow_markup = true;
-      allow_images = true;
       image_size = 18;
       gtk_dark = true;
     };
@@ -49,6 +48,10 @@
         margin: 4px;
         border: none;
         color: #d8dee9;
+      }
+
+      #text:selected {
+        background: none;
       }
 
       #entry:selected {

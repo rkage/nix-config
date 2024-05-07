@@ -4,6 +4,9 @@
       "4" = [
         {app_id = "^firefox$";}
       ];
+      "0" = [
+        {class = "^vesktop";}
+      ];
     };
     workspaceOutputAssign = [
       {

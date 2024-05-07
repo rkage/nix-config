@@ -22,6 +22,8 @@
     kubectl
     kubecolor
     talosctl
+    fluxcd
+    stern
 
     # terraform
     terraform

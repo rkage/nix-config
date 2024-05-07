@@ -2,20 +2,22 @@
   description = "My NixOS configuration";
 
   inputs = {
-    # Nix ecosystem
+    systems.url = "github:nix-systems/default-linux";
+    hardware.url = "github:nixos/nixos-hardware";
+
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
 
     nix = {
-      url = "github:nixos/nix/2.21-maintenance";
+      url = "github:nixos/nix/2.22-maintenance";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
-    hardware.url = "github:nixos/nixos-hardware";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     sops-nix = {
       url = "github:mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,16 +34,13 @@
     self,
     nixpkgs,
     home-manager,
+    systems,
     ...
   } @ inputs: let
     inherit (self) outputs;
     lib = nixpkgs.lib // home-manager.lib;
-    systems = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
-    # forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
-    pkgsFor = lib.genAttrs systems (
+    forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
+    pkgsFor = lib.genAttrs (import systems) (
       system:
         import nixpkgs {
           inherit system;
@@ -50,10 +49,9 @@
     );
   in {
     inherit lib;
-
+    homeManagerModules = import ./modules/home-manager;
     overlays = import ./overlays {inherit inputs outputs;};
-
-    # packages = forEachSystem (pkgs: import ./pkgs { inherit pkgs; });
+    formatter = forEachSystem (pkgs: pkgs.alejandra);
 
     nixosConfigurations = {
       # Main desktop B550-DS3H
@@ -67,7 +65,10 @@
 
     homeConfigurations = {
       "nick@nicks-pc" = lib.homeManagerConfiguration {
-        modules = [./home/nick/nicks-pc.nix];
+        modules = [
+          ./home/nick/nicks-pc.nix
+          ./home/nick/nixpkgs.nix
+        ];
         pkgs = pkgsFor.x86_64-linux;
         extraSpecialArgs = {
           inherit inputs outputs;

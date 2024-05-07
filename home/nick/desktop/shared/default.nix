@@ -8,6 +8,8 @@
     ./gtk.nix
     ./fonts.nix
     ./firefox.nix
+    ./discord.nix
+    # ./pavucontrol.nix
     ./wezterm.nix
   ];
 

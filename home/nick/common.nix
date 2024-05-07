@@ -6,19 +6,12 @@
   outputs,
   ...
 }: {
-  imports = [
-    ./shared/cli
-    ./shared/nvim
-  ];
-  # ] ++ (builtins.attrValues outputs.homeManagerModules);
-
-  nixpkgs = {
-    overlays = builtins.attrValues outputs.overlays;
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = _: true;
-    };
-  };
+  imports =
+    [
+      ./shared/cli
+      ./shared/nvim
+    ]
+    ++ (builtins.attrValues outputs.homeManagerModules);
 
   nix = {
     package = lib.mkDefault pkgs.nix;
@@ -26,7 +19,6 @@
       experimental-features = [
         "nix-command"
         "flakes"
-        "repl-flake"
         "ca-derivations"
       ];
       warn-dirty = false;

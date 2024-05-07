@@ -6,6 +6,9 @@
 }: let
   homeConfigs = config.home-manager.users;
   homeSharePaths = lib.mapAttrsToList (_: v: "${v.home.path}/share") homeConfigs;
+  nickConfig = homeConfigs.nick;
+  wallpaper = nickConfig.wallpaper;
+
   vars = ''XDG_DATA_DIRS=$XDG_DATA_DIRS:${lib.concatStringsSep ":" homeSharePaths} GTK_USE_PORTAL=0'';
 
   sway-greetd = command: "${lib.getExe pkgs.sway} --unsupported-gpu --config ${pkgs.writeText "greetd-config" ''
@@ -27,7 +30,14 @@ in {
     settings = {
       GTK = {
         application_prefer_dark_theme = true;
-        theme_name = "Nordic";
+        theme_name = "Nordic-darker";
+      };
+      background = {
+        path = builtins.fetchurl {
+          url = "https://i.imgur.com/g9UFBTk.jpg";
+          sha256 = "0xynlk05212b0bhyavc7iwabq6hxr6fla6hqkvmp464g48lgyyn8";
+        };
+        fit = "Cover";
       };
     };
   };

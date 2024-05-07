@@ -1,6 +1,4 @@
-{pkgs ? import <nixpkgs> {}}: let
-  inherit (pkgs) lib;
-in rec {
+{pkgs ? import <nixpkgs> {}, ...}: rec {
   wallpapers = import ./wallpapers {inherit pkgs;};
-  # allWallpapers = pkgs.linkFarmFromDrvs "wallpapers" (lib.attrValues wallpapers);
+  allWallpapers = pkgs.linkFarmFromDrvs "wallpapers" (pkgs.lib.attrValues wallpapers);
 }

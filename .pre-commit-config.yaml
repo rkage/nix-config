@@ -1,6 +1,5 @@
 ---
 repos:
-repos:
   - repo: https://github.com/kamadorueda/alejandra
     rev: 3.0.0
     hooks:
