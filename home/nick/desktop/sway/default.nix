@@ -97,11 +97,11 @@
       };
       output = {
         "DP-3" = {
-          bg = "~/Pictures/wallpapers/rick-nord-left.png fill";
+          bg = "${pkgs.wallpapers.rick-nord-wallpaper} fill";
           resolution = "1920x1080";
         };
         "DP-5" = {
-          bg = "~/Pictures/wallpapers/rick-nord-left.png fill";
+          bg = "${config.wallpaper} fill";
           resolution = "1920x1080";
         };
       };

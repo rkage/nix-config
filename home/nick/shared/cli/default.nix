@@ -12,12 +12,6 @@
   ];
 
   home.packages = with pkgs; [
-    # dev utils - will go in neovim
-    nodejs
-    nixd
-    alejandra
-    gcc
-
     # kubernetes
     kubectl
     kubecolor
