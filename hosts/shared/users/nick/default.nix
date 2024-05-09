@@ -8,7 +8,6 @@ in {
   users.mutableUsers = false;
   users.users.nick = {
     isNormalUser = true;
-    shell = pkgs.fish;
     extraGroups =
       [
         "wheel"

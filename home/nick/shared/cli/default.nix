@@ -14,6 +14,7 @@
   home.packages = with pkgs; [
     # kubernetes
     kubectl
+    kubectl-cnpg
     kubecolor
     talosctl
     fluxcd

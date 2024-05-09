@@ -13,6 +13,7 @@
     ../shared
     ../shared/users/nick
 
+    ../shared/bash.nix
     ../shared/quietboot.nix
     ../shared/greetd.nix
     ../shared/pipewire.nix
