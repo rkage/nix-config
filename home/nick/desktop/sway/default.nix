@@ -9,11 +9,9 @@
     ../shared/wayland-wm
     ./assigns.nix
     ./keybinds.nix
-    ./waybar.nix
   ];
 
   xdg.mimeApps.enable = true;
-  xdg.portal.configPackages = [pkgs.xdg-desktop-portal-wlr];
 
   wayland.windowManager.sway = let
     bgdark = "#2e3440";

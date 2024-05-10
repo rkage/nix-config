@@ -1,9 +1,15 @@
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./gammastep.nix
     ./swayidle.nix
     ./swaylock.nix
+    ./mako.nix
     ./wofi.nix
+    ./waybar.nix
   ];
 
   home.packages = with pkgs; [
@@ -27,4 +33,5 @@
 
   xdg.mimeApps.enable = true;
   xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-wlr];
+  xdg.portal.configPackages = [config.wayland.windowManager.sway.package];
 }

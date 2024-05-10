@@ -14,6 +14,7 @@
       "Escape" = "mode default";
       "Return" = "mode default";
     };
+    notify-send = lib.getExe' pkgs.libnotify "notify-send";
 
     # Helpers
     mapDirection = {
