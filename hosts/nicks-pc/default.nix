@@ -17,6 +17,7 @@
     ../shared/quietboot.nix
     ../shared/greetd.nix
     ../shared/pipewire.nix
+    ../shared/printing.nix
   ];
 
   networking = {
@@ -25,7 +26,7 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+    kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest;
     kernelParams = ["amd_pstate=active" "acpi_enforce_resources=lax"];
   };
 

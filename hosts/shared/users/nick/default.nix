@@ -21,6 +21,7 @@ in {
     packages = [
       pkgs.home-manager
       pkgs.polkit_gnome
+      pkgs.cachix
     ];
   };
 

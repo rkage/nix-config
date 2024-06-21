@@ -6,16 +6,16 @@
   home.sessionVariables.EDITOR = "nvim";
 
   home.packages = with pkgs; [
-    # dev utils - will go in neovim
     nodejs
     nixd
     alejandra
+    nixfmt-rfc-style
+    nix-diff
     gcc
   ];
 
   programs.neovim = {
     enable = true;
-
     viAlias = true;
     vimAlias = true;
   };

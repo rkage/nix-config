@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }: {
   wayland.windowManager.sway.config = let
@@ -14,7 +15,7 @@
       "Escape" = "mode default";
       "Return" = "mode default";
     };
-    notify-send = lib.getExe' pkgs.libnotify "notify-send";
+    notify-send = lib.getExe pkgs.libnotify "notify-send";
 
     # Helpers
     mapDirection = {
@@ -37,11 +38,6 @@
         "${optionalString (prefixKey != null) "${prefixKey}+"}l" = rightCmd;
       };
   in {
-    keybindings = lib.mkOptionDefault {
-      "${mod}+r" = ''mode "${resizeMode}"'';
-      "${mod}+Escape" = ''mode "${powerManagementMode}"'';
-      "${mod}+p" = ''mode "${displayLayoutMode}"'';
-    };
     modes = {
       ${resizeMode} =
         (mapDirection {
@@ -58,6 +54,11 @@
           "Shift+s" = "mode default, exec systemctl poweroff";
         }
         // exitMode;
+    };
+    keybindings = lib.mkOptionDefault {
+      "${mod}+r" = ''mode "${resizeMode}"'';
+      "${mod}+Escape" = ''mode "${powerManagementMode}"'';
+      "${mod}+p" = ''mode "${displayLayoutMode}"'';
     };
   };
 }

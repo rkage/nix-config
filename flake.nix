@@ -6,12 +6,7 @@
     hardware.url = "github:nixos/nixos-hardware";
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
-
-    nix = {
-      url = "github:nixos/nix/2.22-maintenance";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -59,6 +54,13 @@
       # Main desktop B550-DS3H
       nicks-pc = lib.nixosSystem {
         modules = [./hosts/nicks-pc];
+        specialArgs = {
+          inherit inputs outputs;
+        };
+      };
+      # Work DEV VM - MacBook Pro 14"
+      work-dev = lib.nixosSystem {
+        modules = [./hosts/work-dev];
         specialArgs = {
           inherit inputs outputs;
         };

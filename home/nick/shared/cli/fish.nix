@@ -30,12 +30,21 @@ in {
     };
 
     shellAliases = {
-      kubectl = mkIf (hasPackage "kubecolor") "kubecolor";
       cat = "bat";
       man = "batman";
     };
 
+    interactiveShellInit =
+      mkIf (hasPackage "stern") ''${pkgs.stern}/bin/stern --completion fish | source'';
+
     functions = {
+      watch = mkIf (hasPackage "kubecolor") ''
+        set -lx KUBECOLOR_FORCE_COLORS true
+        command ${pkgs.watch}/bin/watch --color --exec ${pkgs.fish}/bin/fish --command "$argv"
+      '';
+      kubectl = mkIf (hasPackage "kubecolor") ''
+        command kubecolor $argv
+      '';
       fish_greeting = "";
       up-or-search = ''
         if commandline --search-mode
@@ -73,7 +82,15 @@ in {
         name = "fzf-fish";
         src = pkgs.fishPlugins.fzf-fish.src;
       }
+      {
+        name = "done";
+        src = pkgs.fishPlugins.done.src;
+      }
     ];
+  };
+
+  home.sessionVariables = {
+    SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
   };
 
   programs.zoxide.enable = true;

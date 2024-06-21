@@ -16,9 +16,20 @@
     kubectl
     kubectl-cnpg
     kubecolor
+    kubevirt
+    kustomize
+    (wrapHelm kubernetes-helm {
+      plugins = with kubernetes-helmPlugins; [
+        helm-diff
+        helm-git
+      ];
+    })
+    helmfile
     talosctl
     fluxcd
     stern
+    cilium-cli
+    hubble
 
     # terraform
     terraform
@@ -29,9 +40,12 @@
     wget
     unzip
     jq
+    yq-go
     ripgrep
     pre-commit
     go-task
+    envsubst
     grc
+    rpi-imager
   ];
 }
