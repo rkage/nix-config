@@ -34,7 +34,7 @@ in {
       man = "batman";
     };
 
-    interactiveShellInit =
+    shellInitLast =
       mkIf (hasPackage "stern") ''${pkgs.stern}/bin/stern --completion fish | source'';
 
     functions = {
