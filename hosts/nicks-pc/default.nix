@@ -42,9 +42,7 @@
   hardware.i2c.enable = true;
   services.hardware.openrgb.enable = true;
   services.udev.extraRules = builtins.readFile "${pkgs.openrgb}/lib/udev/rules.d/60-openrgb.rules";
-  hardware.opengl = {
-    enable = true;
-  };
+  hardware.graphics.enable = true;
 
   system.stateVersion = "23.05";
 }
