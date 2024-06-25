@@ -94,12 +94,12 @@
         };
       };
       output = {
-        "DP-3" = {
-          bg = "${pkgs.wallpapers.rick-nord-wallpaper} fill";
+        "HDMI-A-1" = {
+          bg = "${config.wallpaperLeft} fill";
           resolution = "1920x1080";
         };
-        "DP-5" = {
-          bg = "${config.wallpaper} fill";
+        "HDMI-A-2" = {
+          bg = "${config.wallpaperRight} fill";
           resolution = "1920x1080";
         };
       };

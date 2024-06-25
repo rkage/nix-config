@@ -9,5 +9,6 @@
     ./desktop/sway
   ];
 
-  wallpaper = lib.mkDefault pkgs.wallpapers.rick-nord-wallpaper;
+  wallpaperLeft = pkgs.wallpapers.dumbest-way-possible;
+  wallpaperRight = pkgs.wallpapers.rick-nord-wallpaper;
 }

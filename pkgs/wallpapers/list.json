@@ -3,12 +3,18 @@
     "ext": "png",
     "id": "nl4dIv8",
     "name": "rick-nord-wallpaper",
-    "sha256": "2f68ccdad9762b1d193d842d5861194b65abdc05d047a3c67e3fd8c7902c1dba"
+    "sha256": "L2jM2tl2Kx0ZPYQtWGEZS2Wr3AXQR6PGfj/Yx5AsHbo="
+  },
+  {
+    "ext": "png",
+    "id": "StBlhoa",
+    "name": "dumbest-way-possible",
+    "sha256": "0m8XcsYAl4yLtVJtxIKMzXo0h1obdSa6d9wtu9A1f68="
   },
   {
     "ext": "jpg",
     "id": "g9UFBTk",
     "name": "rick-nord-garage",
-    "sha256": "c87aff28228f1872eb9e181a459dc91d1abc148f876de5e1024b0451c0a4d677"
+    "sha256": "yHr/KCKPGHLrnhgaRZ3JHRq8FI+HbeXhAksEUcCk1nc="
   }
 ]
