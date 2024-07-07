@@ -14,7 +14,7 @@
   home.packages = with pkgs; [
     # kubernetes
     kubectl
-    kubectl-cnpg
+    krew
     kubecolor
     kubevirt
     kustomize
@@ -33,6 +33,10 @@
 
     # terraform
     terraform
+
+    # containers
+    nerdctl
+    runc
 
     # utilities
     age
