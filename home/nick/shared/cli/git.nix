@@ -37,8 +37,8 @@
 
   # GitHub CLI
   # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.gh.enable
-  # programs.gh = {
-  #   enable = true;
-  #   settings.git_protocol = "ssh";
-  # };
+  programs.gh = {
+    enable = true;
+    settings.git_protocol = "ssh";
+  };
 }
