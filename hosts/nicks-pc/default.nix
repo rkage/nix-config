@@ -1,48 +1,51 @@
 {
-  pkgs,
   inputs,
+  pkgs,
   ...
-}: {
+}:
+{
   imports = [
     inputs.hardware.nixosModules.common-cpu-amd
+    inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-ssd
-    ../shared/gigabyte-b550-fix.nix
+    inputs.hardware.nixosModules.gigabyte-b550
 
     ./hardware-configuration.nix
 
-    ../shared
-    ../shared/users/nick
+    ../common
+    ../common/optional/_1password.nix
+    ../common/optional/greetd.nix
+    ../common/optional/pipewire.nix
 
-    ../shared/bash.nix
-    ../shared/quietboot.nix
-    ../shared/greetd.nix
-    ../shared/pipewire.nix
-    ../shared/printing.nix
+    ../users/nick
   ];
 
-  networking = {
-    hostName = "nicks-pc";
-    useDHCP = true;
+  networking.hostName = "Nicks-PC";
+  networking.useDHCP = false;
+  systemd.network.enable = true;
+  systemd.network.networks."50-enp5s0" = {
+    matchConfig.Name = "enp5s0";
+    networkConfig = {
+      DHCP = "ipv4";
+      IPv6AcceptRA = true;
+    };
+    linkConfig.RequiredForOnline = "routable";
   };
 
-  boot = {
-    kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest;
-    kernelParams = ["amd_pstate=active" "acpi_enforce_resources=lax"];
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest;
+
+  programs.hyprland.enable = true;
+  programs.hyprland.withUWSM = true;
+
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services = {
+    login.enableGnomeKeyring = true;
+    hyprlock = { };
   };
 
-  services.logind.extraConfig = ''
-    IdleAction=suspend
-    IdleActionSec=3600
-  '';
-
-  programs = {
-    dconf.enable = true;
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
   };
 
-  hardware.i2c.enable = true;
-  services.hardware.openrgb.enable = true;
-  services.udev.extraRules = builtins.readFile "${pkgs.openrgb}/lib/udev/rules.d/60-openrgb.rules";
-  hardware.graphics.enable = true;
-
-  system.stateVersion = "23.05";
+  system.stateVersion = "24.11";
 }

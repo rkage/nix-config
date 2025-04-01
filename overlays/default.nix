@@ -1,24 +1,15 @@
+{ inputs, ... }:
 {
-  outputs,
-  inputs,
-}: {
-  flake-inputs = final: _: {
-    inputs =
-      builtins.mapAttrs (
-        _: flake: let
-          legacyPackages = (flake.legacyPackages or {}).${final.system} or {};
-          packages = (flake.packages or {}).${final.system} or {};
-        in
-          if legacyPackages != {}
-          then legacyPackages
-          else packages
-      )
-      inputs;
+  stable-packages = final: _prev: {
+    stable = import inputs.nixpkgs-stable {
+      system = final.system;
+      config.allowUnfree = true;
+    };
   };
 
-  stable = final: _: {
-    stable = inputs.nixpkgs-stable.legacyPackages.${final.system};
+  nvchad-packages = final: _prev: {
+    nvchad = import inputs.nvchad4nix.packages {
+      system = final.system;
+    };
   };
-
-  additions = final: prev: import ../pkgs {pkgs = final;};
 }
